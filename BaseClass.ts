@@ -551,8 +551,8 @@ export class BaseClass {
          if (formData==null) {
             formData = new FormData()
          }
-         
-         if (file instanceof Blob) {
+
+         if (file instanceof Blob || file instanceof File) {
             formData.append('file', file);
          }
          else {
