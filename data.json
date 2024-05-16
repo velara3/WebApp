@@ -1,0 +1,23 @@
+{
+   "items": [
+       {
+           "id": "1000",
+           "name": "Item 1",
+           "thumbnail": "",
+           "created": "2023-10-11 09:48:51"
+       },
+       {
+           "id": "1001",
+           "name": "Item 2",
+           "thumbnail": "",
+           "created": "2023-10-11 09:53:52"
+       },
+       {
+           "id": "1002",
+           "name": "Item 3",
+           "thumbnail": "",
+           "created": "2023-10-11 09:59:49"
+       }
+   ],
+   "success": true
+}

@@ -1,0 +1,30 @@
+
+.display {
+	display: block !important;
+}
+.noDisplay {
+	display: none !important;
+}
+.center { 
+   left: 50%;
+   top: 50%;
+   transform: translateX(-50%) translateY(-50%);
+}
+.invalid {
+   color: red !important;
+}
+.valid {
+   color: green !important;
+}
+.noPointerEvents {
+    pointer-events: none;
+}
+dialog:focus {
+    outline: none;
+}
+dialog::backdrop {
+    background: rgba(0,0,0,.25);
+}
+.dim {
+	opacity: .5;
+}

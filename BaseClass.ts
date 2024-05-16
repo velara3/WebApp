@@ -511,13 +511,121 @@ export class BaseClass {
        }
    }
 
-    copyToClipboard(value) {
-        navigator.clipboard.writeText(value);
-    }
+   async getDownloadData(url): Promise<Blob> {
+      var binary = await this.getFileBinaryAtURL(url);
+      var binaryBuffer = new Blob([binary.buffer]);
+      return binaryBuffer;
+   }
+      
+   getFileBinaryAtURL(url): Promise<Uint8Array> {
+      return new Promise((resolve, reject) => {
+         const request = new XMLHttpRequest();
 
-    openInWindow(url, target) {
-        window.open(url, target);
-    }
+         request.onload = () => {
+            if (request.status === 200) {
+               try {
+                  const array = new Uint8Array(request.response);
+                  resolve(array);
+               }
+               catch (error) {
+                  reject(error);
+               }
+            }
+            else {
+               reject(request.status);
+            }
+         }
+
+         request.onerror = reject;
+         request.onabort = reject;
+         request.open('GET', url, true);
+         request.responseType = "arraybuffer";
+         request.send();
+      });
+   }
+
+   async upload(url, file: File|Blob|Array<File|Blob>, formData?: FormData) {
+
+      try {
+
+         if (formData==null) {
+            formData = new FormData()
+         }
+         
+         if (file instanceof Blob) {
+            formData.append('file', file);
+         }
+         else {
+            var files = file as Array<Blob|File>;
+            for (const file of files) {
+               formData.append('files', file);
+            }
+         }
+
+         try {
+            var results = await this.postURL(url, formData);
+            return results;
+         }
+         catch(error) {
+            this.log(error);
+            return error;
+         }
+      }
+      catch(error) {
+         this.log(error);
+         return error;
+      }
+   }
+
+   copyToClipboard(value) {
+      navigator.clipboard.writeText(value);
+   }
+
+   openInWindow(url, target) {
+      window.open(url, target);
+   }
+   
+   async checkFragment() {
+      var hash = window.location.hash.replace("#","").toLowerCase();
+
+      switch(hash) {
+         case "case1":
+            break;
+         case "case2":
+            break;
+         case "":
+            break;
+         default:
+      }
+   }
+
+   createOption(label, value, useListItem = false, icon = null, classes = [], callback?) {
+      var optionName = useListItem ? "li" : "option";
+      var option = document.createElement(optionName) as HTMLOptionElement;
+      option.innerText = label;
+   
+      if (icon) {
+         var iconElement = document.createElement("img");
+         iconElement.src = icon;
+         option.innerHTML = iconElement.outerHTML + label;
+      
+         for (var className in classes) {
+            option.classList.add(classes[className]);
+         }
+      }
+      else {
+         option.innerHTML = label;
+      }
+   
+      option.label = label;
+      option.value = value;
+   
+      if (callback) {
+         callback(option, label, value);
+      }
+   
+      return option;
+   }
  
     /**
     * Log values to the console
