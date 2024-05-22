@@ -1,0 +1,24 @@
+{
+  "name": "base-class-ts",
+  "version": "1.0.0",
+  "description": "Base class for client side typescript",
+  "main": "BaseClass.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/velara3/WebApp.git"
+  },
+  "keywords": [
+    "javascript",
+    "web",
+    "typescript"
+  ],
+  "author": "Velara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/velara3/WebApp/issues"
+  },
+  "homepage": "https://github.com/velara3/WebApp#readme"
+}
