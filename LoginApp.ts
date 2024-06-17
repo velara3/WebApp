@@ -17,7 +17,7 @@ export class LoginApp extends BaseClass {
       }
       catch(error) {
          this.log(error);
-         this.showDialog("Error", error);
+         this.showDialog("Error", error as string);
       }
    }
 
@@ -27,13 +27,13 @@ export class LoginApp extends BaseClass {
       view.passwordInput.addEventListener("keyup", this.inputKeyupHandler);
    }
    
-   inputKeyupHandler(event) {
+   inputKeyupHandler(event: any) {
       if (event.keyCode==13) {
          this.submitFormHandler(event);
       }
    }
 
-   async submitFormHandler(event) {
+   async submitFormHandler(event: any) {
       try {
          var idValue: string = view.idInput.value.trim();
          var passwordValue: string = view.passwordInput.value.trim();
@@ -67,7 +67,7 @@ export class LoginApp extends BaseClass {
          }
       }
       catch(error) {
-        this.showDialog("Error", error);
+        this.showDialog("Error", error as string);
         console.log(error);
       }
    }

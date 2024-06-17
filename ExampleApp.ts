@@ -4,8 +4,8 @@ import { BaseClass } from "./BaseClass.js";
 window.addEventListener(BaseClass.PAGE_LOADED, ()=> { new ExampleApp().contentLoaded() })
 
 export class ExampleApp extends BaseClass {
-   examplesData = {};
-   renderers = {};
+   examplesData: Record<string, any> = {};
+   renderers: Record<string, any> = {};
 
    constructor() {
       super();
@@ -34,7 +34,7 @@ export class ExampleApp extends BaseClass {
       }
    }
 
-   async getExamplesHandler(event) {
+   async getExamplesHandler(event:Event) {
       await this.getExampleData();
    }
 
@@ -62,7 +62,7 @@ export class ExampleApp extends BaseClass {
       }
    }
    
-   parseData(container, data, clear = false) {
+   parseData(container:HTMLElement, data:Record<string, any>, clear = false) {
       try {
          var items = data;
          var numberOfItems = items ? items.length : 0;
@@ -95,11 +95,11 @@ export class ExampleApp extends BaseClass {
       }
       catch(error) {
          this.log(error);
-         this.showDialog("Error", error);
+         this.showDialog("Error", error as string);
       }
    }
 
-   async exampleItemClickHandler(event) {
+   async exampleItemClickHandler(event: any) {
       try {
          var itemRenderer = event.currentTarget;
          var id = itemRenderer.dataset.id;

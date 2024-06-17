@@ -489,11 +489,11 @@ export class BaseClass {
     */
    bindProperties(mainClass: any) {
       var properties: any = Object.getOwnPropertyNames(mainClass.prototype);
+      var that: any = this;
       for (var key in properties) {
          var property: string = properties[key];
          if (property !== "constructor") {
-            // @ts-ignore
-            this[property] = this[property].bind(this);
+            that[property] = that[property].bind(this);
          }
       }
    }
