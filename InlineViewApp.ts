@@ -23,7 +23,7 @@ export class HomeClass extends BaseClass {
       }
    }
 
-   async contentLoaded() {
+   override async contentLoaded() {
       this.bindProperties(HomeClass);
       this.getUser();
    }

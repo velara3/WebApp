@@ -21,7 +21,7 @@ export class LoginApp extends BaseClass {
       }
    }
 
-   setupEventListeners(): void {
+   override setupEventListeners(): void {
       view.submitButton.addEventListener("click", this.submitFormHandler);
       view.idInput.addEventListener("keyup", this.inputKeyupHandler);
       view.passwordInput.addEventListener("keyup", this.inputKeyupHandler);

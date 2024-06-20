@@ -11,7 +11,7 @@ export class ExampleApp extends BaseClass {
       super();
    }
 
-   async contentLoaded() {
+   override async contentLoaded() {
 
       try {
          this.bindProperties(ExampleApp);
@@ -24,7 +24,7 @@ export class ExampleApp extends BaseClass {
       }
    }
 
-   setupEventListeners(): void {
+   override setupEventListeners(): void {
       try {
          view.examplesButton.addEventListener("click", this.getExamplesHandler);
          window.addEventListener("message", this.postMessageHandler);
@@ -110,7 +110,7 @@ export class ExampleApp extends BaseClass {
       }
    }
 
-   async checkQuery() {
+   override async checkQuery() {
       try {
          var url = new URL(window.location.href);
          var parameters = url.searchParams;
