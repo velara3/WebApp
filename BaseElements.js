@@ -1,13 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseElements = void 0;
-class BaseElements {
-    constructor() {
-        this.requestIcon = document.getElementById("requestIcon");
-        this.dialog = document.getElementById("dialog");
-        this.dialogTitle = document.getElementById("dialogTitle");
-        this.dialogMessage = document.getElementById("dialogMessage");
-        this.versionLabel = document.getElementById("versionLabel");
-    }
+export class BaseElements {
+    requestIcon = document.getElementById("requestIcon");
+    dialog = document.getElementById("dialog");
+    dialogTitle = document.getElementById("dialogTitle");
+    dialogMessage = document.getElementById("dialogMessage");
+    versionLabel = document.getElementById("versionLabel");
 }
-exports.BaseElements = BaseElements;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQmFzZUVsZW1lbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiQmFzZUVsZW1lbnRzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sT0FBTyxZQUFZO0lBQ3JCLFdBQVcsR0FBRyxRQUFRLENBQUMsY0FBYyxDQUFDLGFBQWEsQ0FBZ0IsQ0FBQztJQUNwRSxNQUFNLEdBQUcsUUFBUSxDQUFDLGNBQWMsQ0FBQyxRQUFRLENBQXNCLENBQUM7SUFDaEUsV0FBVyxHQUFHLFFBQVEsQ0FBQyxjQUFjLENBQUMsYUFBYSxDQUFnQixDQUFDO0lBQ3BFLGFBQWEsR0FBRyxRQUFRLENBQUMsY0FBYyxDQUFDLGVBQWUsQ0FBZ0IsQ0FBQztJQUN4RSxZQUFZLEdBQUcsUUFBUSxDQUFDLGNBQWMsQ0FBQyxjQUFjLENBQWdCLENBQUM7Q0FDeEUifQ==

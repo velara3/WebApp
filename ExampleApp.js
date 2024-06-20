@@ -1,59 +1,22 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExampleApp = void 0;
-const view = __importStar(require("./ExampleElements.js"));
-const BaseClass_js_1 = require("./BaseClass.js");
-window.addEventListener(BaseClass_js_1.BaseClass.PAGE_LOADED, () => { new ExampleApp().contentLoaded(); });
-class ExampleApp extends BaseClass_js_1.BaseClass {
+import * as view from "./ExampleElements.js";
+import { BaseClass } from "./BaseClass.js";
+window.addEventListener(BaseClass.PAGE_LOADED, () => { new ExampleApp().contentLoaded(); });
+export class ExampleApp extends BaseClass {
+    examplesData = {};
+    renderers = {};
     constructor() {
         super();
-        this.examplesData = {};
-        this.renderers = {};
     }
-    contentLoaded() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                this.bindProperties(ExampleApp);
-                this.showRequestIcon(false);
-                this.setupEventListeners();
-                yield this.getExampleData();
-            }
-            catch (error) {
-                this.log(error);
-            }
-        });
+    async contentLoaded() {
+        try {
+            this.bindProperties(ExampleApp);
+            this.showRequestIcon(false);
+            this.setupEventListeners();
+            await this.getExampleData();
+        }
+        catch (error) {
+            this.log(error);
+        }
     }
     setupEventListeners() {
         try {
@@ -64,33 +27,29 @@ class ExampleApp extends BaseClass_js_1.BaseClass {
             this.log(error);
         }
     }
-    getExamplesHandler(event) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.getExampleData();
-        });
+    async getExamplesHandler(event) {
+        await this.getExampleData();
     }
-    getExampleData() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                var results = yield this.requestURL("examples");
-                this.log(results);
-                if (results.success == false) {
-                    if (results.notLoggedIn == true) {
-                        this.showDialog("Login", "Login required", () => {
-                            window.location.href = "/login";
-                        });
-                        return;
-                    }
-                    else {
-                        this.showDialog("Error", results.message);
-                    }
+    async getExampleData() {
+        try {
+            var results = await this.requestURL("examples");
+            this.log(results);
+            if (results.success == false) {
+                if (results.notLoggedIn == true) {
+                    this.showDialog("Login", "Login required", () => {
+                        window.location.href = "/login";
+                    });
+                    return;
                 }
-                this.parseData(view.exampleGrid, results.data);
+                else {
+                    this.showDialog("Error", results.message);
+                }
             }
-            catch (error) {
-                this.log(error);
-            }
-        });
+            this.parseData(view.exampleGrid, results.data);
+        }
+        catch (error) {
+            this.log(error);
+        }
     }
     parseData(container, data, clear = false) {
         try {
@@ -122,31 +81,27 @@ class ExampleApp extends BaseClass_js_1.BaseClass {
             this.showDialog("Error", error);
         }
     }
-    exampleItemClickHandler(event) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                var itemRenderer = event.currentTarget;
-                var id = itemRenderer.dataset.id;
-                var item = this.examplesData[id];
-            }
-            catch (error) {
-                this.log(error);
-            }
-        });
+    async exampleItemClickHandler(event) {
+        try {
+            var itemRenderer = event.currentTarget;
+            var id = itemRenderer.dataset.id;
+            var item = this.examplesData[id];
+        }
+        catch (error) {
+            this.log(error);
+        }
     }
-    checkQuery() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                var url = new URL(window.location.href);
-                var parameters = url.searchParams;
-                var id = parameters.get("id");
-                if (id) {
-                }
+    async checkQuery() {
+        try {
+            var url = new URL(window.location.href);
+            var parameters = url.searchParams;
+            var id = parameters.get("id");
+            if (id) {
             }
-            catch (error) {
-                this.log(error);
-            }
-        });
+        }
+        catch (error) {
+            this.log(error);
+        }
     }
 }
-exports.ExampleApp = ExampleApp;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXhhbXBsZUFwcC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkV4YW1wbGVBcHAudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxLQUFLLElBQUksTUFBTSxzQkFBc0IsQ0FBQztBQUM3QyxPQUFPLEVBQUUsU0FBUyxFQUFFLE1BQU0sZ0JBQWdCLENBQUM7QUFFM0MsTUFBTSxDQUFDLGdCQUFnQixDQUFDLFNBQVMsQ0FBQyxXQUFXLEVBQUUsR0FBRSxFQUFFLEdBQUcsSUFBSSxVQUFVLEVBQUUsQ0FBQyxhQUFhLEVBQUUsQ0FBQSxDQUFDLENBQUMsQ0FBQyxDQUFBO0FBRXpGLE1BQU0sT0FBTyxVQUFXLFNBQVEsU0FBUztJQUN0QyxZQUFZLEdBQXdCLEVBQUUsQ0FBQztJQUN2QyxTQUFTLEdBQXdCLEVBQUUsQ0FBQztJQUVwQztRQUNHLEtBQUssRUFBRSxDQUFDO0lBQ1gsQ0FBQztJQUVELEtBQUssQ0FBQyxhQUFhO1FBRWhCLElBQUksQ0FBQztZQUNGLElBQUksQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLENBQUM7WUFDaEMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxLQUFLLENBQUMsQ0FBQztZQUM1QixJQUFJLENBQUMsbUJBQW1CLEVBQUUsQ0FBQztZQUMzQixNQUFNLElBQUksQ0FBQyxjQUFjLEVBQUUsQ0FBQztRQUMvQixDQUFDO1FBQ0QsT0FBTSxLQUFLLEVBQUUsQ0FBQztZQUNYLElBQUksQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDbkIsQ0FBQztJQUNKLENBQUM7SUFFRCxtQkFBbUI7UUFDaEIsSUFBSSxDQUFDO1lBQ0YsSUFBSSxDQUFDLGNBQWMsQ0FBQyxnQkFBZ0IsQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDLGtCQUFrQixDQUFDLENBQUM7WUFDdkUsTUFBTSxDQUFDLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxJQUFJLENBQUMsa0JBQWtCLENBQUMsQ0FBQztRQUMvRCxDQUFDO1FBQ0QsT0FBTSxLQUFLLEVB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

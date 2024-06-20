@@ -1,12 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExtendedElements = void 0;
-const BaseElements_js_1 = require("./BaseElements.js");
-class ExtendedElements extends BaseElements_js_1.BaseElements {
-    constructor() {
-        super(...arguments);
-        this.createButton = document.getElementById("createButton");
-        this.applyButton = document.getElementById("applyButton");
-    }
+import { BaseElements } from "./BaseElements.js";
+export class ExtendedElements extends BaseElements {
+    createButton = document.getElementById("createButton");
+    applyButton = document.getElementById("applyButton");
 }
-exports.ExtendedElements = ExtendedElements;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXh0ZW5kZWRWaWV3LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXh0ZW5kZWRWaWV3LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxZQUFZLEVBQUUsTUFBTSxtQkFBbUIsQ0FBQztBQUVqRCxNQUFNLE9BQU8sZ0JBQWlCLFNBQVEsWUFBWTtJQUMvQyxZQUFZLEdBQUcsUUFBUSxDQUFDLGNBQWMsQ0FBQyxjQUFjLENBQWdCLENBQUM7SUFDdEUsV0FBVyxHQUFHLFFBQVEsQ0FBQyxjQUFjLENBQUMsYUFBYSxDQUFnQixDQUFDO0NBQ3RFIn0=

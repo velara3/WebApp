@@ -1,25 +1,11 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.HomeClass = void 0;
-const BaseClass_js_1 = require("./BaseClass.js");
+import { BaseClass } from "./BaseClass.js";
 window.addEventListener("DOMContentLoaded", () => { new HomeClass(); });
 class UserView {
-    constructor() {
-        this.userLabel = document.getElementById("userLabel");
-        this.userIcon = document.getElementById("userIcon");
-    }
+    userLabel = document.getElementById("userLabel");
+    userIcon = document.getElementById("userIcon");
 }
 var userView = new UserView();
-class HomeClass extends BaseClass_js_1.BaseClass {
+export class HomeClass extends BaseClass {
     constructor() {
         super();
         try {
@@ -30,22 +16,18 @@ class HomeClass extends BaseClass_js_1.BaseClass {
             this.log(error);
         }
     }
-    contentLoaded() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.bindProperties(HomeClass);
-            this.getUser();
-        });
+    async contentLoaded() {
+        this.bindProperties(HomeClass);
+        this.getUser();
     }
-    getUser() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                var data = yield this.requestURL("user");
-                this.setContent(userView.userLabel, data.user);
-            }
-            catch (error) {
-                this.log(error);
-            }
-        });
+    async getUser() {
+        try {
+            var data = await this.requestURL("user");
+            this.setContent(userView.userLabel, data.user);
+        }
+        catch (error) {
+            this.log(error);
+        }
     }
 }
-exports.HomeClass = HomeClass;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSW5saW5lVmlld0FwcC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIklubGluZVZpZXdBcHAudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLFNBQVMsRUFBRSxNQUFNLGdCQUFnQixDQUFDO0FBRTNDLE1BQU0sQ0FBQyxnQkFBZ0IsQ0FBQyxrQkFBa0IsRUFBRSxHQUFFLEVBQUUsR0FBRyxJQUFJLFNBQVMsRUFBRSxDQUFBLENBQUMsQ0FBQyxDQUFDLENBQUE7QUFFckUsTUFBTSxRQUFRO0lBQ1gsU0FBUyxHQUFHLFFBQVEsQ0FBQyxjQUFjLENBQUMsV0FBVyxDQUFnQixDQUFDO0lBQ2hFLFFBQVEsR0FBRyxRQUFRLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBZ0IsQ0FBQztDQUNoRTtBQUVELElBQUksUUFBUSxHQUFHLElBQUksUUFBUSxFQUFFLENBQUM7QUFFOUIsTUFBTSxPQUFPLFNBQVUsU0FBUSxTQUFTO0lBRXJDO1FBQ0csS0FBSyxFQUFFLENBQUM7UUFFUixJQUFJLENBQUM7WUFDRixJQUFJLENBQUMsY0FBYyxDQUFDLFNBQVMsQ0FBQyxDQUFDO1lBQy9CLElBQUksQ0FBQyxhQUFhLEVBQUUsQ0FBQztRQUN4QixDQUFDO1FBQ0QsT0FBTSxLQUFLLEVBQUUsQ0FBQztZQUNYLElBQUksQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDbkIsQ0FBQztJQUNKLENBQUM7SUFFRCxLQUFLLENBQUMsYUFBYTtRQUNoQixJQUFJLENBQUMsY0FBYyxDQUFDLFNBQVMsQ0FBQyxDQUFDO1FBQy9CLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQztJQUNsQixDQUFDO0lBRUQsS0FBSyxDQUFDLE9BQU87UUFDVixJQUFJLENBQUM7WUFDRixJQUFJLElBQUksR0FBRyxNQUFNLElBQUksQ0FBQyxVQUFVLENBQUMsTUFBTSxDQUFDLENBQUM7WUFDekMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxRQUFRLENBQUMsU0FBUyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUNsRCxDQUFDO1FBQ0QsT0FBTSxLQUFLLEVBQUUsQ0FBQztZQUNYLElBQUksQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDbkIsQ0FBQztJQUNKLENBQUM7Q0FDSCJ9

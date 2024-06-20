@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.examplesButton = exports.exampleItemRenderer = exports.exampleGrid = exports.dialogMessage = exports.dialogTitle = exports.versionLabel = exports.requestIcon = exports.dialog = void 0;
 // import * as view from "./Elements.js";
-exports.dialog = document.querySelector("#dialog");
-exports.requestIcon = document.querySelector("#requestIcon");
-exports.versionLabel = document.querySelector("#versionLabel");
-exports.dialogTitle = document.querySelector("#dialogTitle");
-exports.dialogMessage = document.querySelector("#dialogMessage");
-exports.exampleGrid = document.querySelector("#exampleGrid");
-exports.exampleItemRenderer = document.querySelector("#exampleItemRenderer");
-exports.examplesButton = document.querySelector("#examplesButton");
+export var dialog = document.querySelector("#dialog");
+export var requestIcon = document.querySelector("#requestIcon");
+export var versionLabel = document.querySelector("#versionLabel");
+export var dialogTitle = document.querySelector("#dialogTitle");
+export var dialogMessage = document.querySelector("#dialogMessage");
+export var exampleGrid = document.querySelector("#exampleGrid");
+export var exampleItemRenderer = document.querySelector("#exampleItemRenderer");
+export var examplesButton = document.querySelector("#examplesButton");
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXhhbXBsZUVsZW1lbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXhhbXBsZUVsZW1lbnRzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHlDQUF5QztBQUN6QyxNQUFNLENBQUMsSUFBSSxNQUFNLEdBQXNCLFFBQVEsQ0FBQyxhQUFhLENBQUMsU0FBUyxDQUFzQixDQUFDO0FBQzlGLE1BQU0sQ0FBQyxJQUFJLFdBQVcsR0FBZ0IsUUFBUSxDQUFDLGFBQWEsQ0FBQyxjQUFjLENBQWdCLENBQUM7QUFDNUYsTUFBTSxDQUFDLElBQUksWUFBWSxHQUFnQixRQUFRLENBQUMsYUFBYSxDQUFDLGVBQWUsQ0FBZ0IsQ0FBQztBQUM5RixNQUFNLENBQUMsSUFBSSxXQUFXLEdBQWdCLFFBQVEsQ0FBQyxhQUFhLENBQUMsY0FBYyxDQUFnQixDQUFDO0FBQzVGLE1BQU0sQ0FBQyxJQUFJLGFBQWEsR0FBZ0IsUUFBUSxDQUFDLGFBQWEsQ0FBQyxnQkFBZ0IsQ0FBZ0IsQ0FBQztBQUNoRyxNQUFNLENBQUMsSUFBSSxXQUFXLEdBQUcsUUFBUSxDQUFDLGFBQWEsQ0FBQyxjQUFjLENBQWdCLENBQUM7QUFDL0UsTUFBTSxDQUFDLElBQUksbUJBQW1CLEdBQWdCLFFBQVEsQ0FBQyxhQUFhLENBQUMsc0JBQXNCLENBQWdCLENBQUM7QUFDNUcsTUFBTSxDQUFDLElBQUksY0FBYyxHQUFnQixRQUFRLENBQUMsYUFBYSxDQUFDLGlCQUFpQixDQUFnQixDQUFDIn0=
