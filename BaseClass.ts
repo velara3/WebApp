@@ -57,17 +57,23 @@ export class BaseClass {
     * var parameters = new URLSearchParams();
     * var url = "url";
     * parameters.set("id", id);
-    * var results = await this.requestURL(url + "?" + parameters.toString() );
+    * var jsonResults = await this.getURL(url + "?" + parameters.toString() );
+    * 
+    * // getting a response object 
+    * var response = await this.getURL("url?" + parameters.toString(), null, null);
+    * 
+    * // getting text  
+    * var text = await this.getURL("url?" + parameters.toString(), null, "text");
     * ```
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
     * @param json returns the results as json. default is true
     * @returns 
     */
-   async getURL(url: string, options: any = null, json: Boolean = true) {
+   async getURL(url: string, options: any = null, type: string = "json") {
       if (options == null) { options = {} };
       options.method = "get";
-      return await this.requestURL(url, options, json);
+      return await this.requestURL(url, options, type);
    }
 
    /**
@@ -83,14 +89,14 @@ export class BaseClass {
     * Cancel using cancelRequests()
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param json returns the results as parsed object from json string  
+    * @param type type of object to return. default is json object. if null then response object  
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
-   async postURL(url: string, form: any, options: any = null, json: Boolean = true) {
+   async postURL(url: string, form: any, options: any = null, type: string = "json") {
       if (options == null) { options = {} }
       if (form && options.body == null) { options.body = form }
       options.method = "post";
-      return await this.requestURL(url, options, json);
+      return await this.requestURL(url, options, type);
    }
 
    /**
@@ -110,13 +116,19 @@ export class BaseClass {
     * var parameters = new URLSearchParams();
     * parameters.set("id", id);
     * var results = await this.requestURL("url?" + parameters.toString() );
+    * 
+    * // getting a response object 
+    * var response = await this.requestURL("url?" + parameters.toString(), null, null);
+    * 
+    * // getting text  
+    * var text = await this.requestURL("url?" + parameters.toString(), null, "text");
     * ```
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param json returns the results as json. default is true
+    * @param type returns the results as json or the response object if false. default is true
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
-   async requestURL(url: string, options: any = null, json: Boolean = true) {
+   async requestURL(url: string, options: any = null, type: string = "json") {
       var response: any = null;
 
       try {
@@ -132,7 +144,6 @@ export class BaseClass {
          this.controllers.set(requestId, controller);
 
          response = await fetch(url, options);
-         var text = await response.text();
 
          this.controllers.delete(requestId);
          this.requestsInProgress--;
@@ -141,7 +152,9 @@ export class BaseClass {
             this.showRequestIcon(false);
          }
 
-         if (json) {
+         if (type == "json") {
+            var text = await response.text();
+
             try {
                var data = JSON.parse(text);
             }
@@ -151,6 +164,10 @@ export class BaseClass {
             }
 
             return data;
+         }
+         else if (type == "text") {
+            var text = await response.text();
+            return text;
          }
 
          return response;
