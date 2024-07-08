@@ -31,14 +31,20 @@ export declare class BaseClass {
      * var parameters = new URLSearchParams();
      * var url = "url";
      * parameters.set("id", id);
-     * var results = await this.requestURL(url + "?" + parameters.toString() );
+     * var jsonResults = await this.getURL(url + "?" + parameters.toString() );
+     *
+     * // getting a response object
+     * var response = await this.getURL("url?" + parameters.toString(), null, null);
+     *
+     * // getting text
+     * var text = await this.getURL("url?" + parameters.toString(), null, "text");
      * ```
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
      * @param json returns the results as json. default is true
      * @returns
      */
-    getURL(url: string, options?: any, json?: Boolean): Promise<any>;
+    getURL(url: string, options?: any, type?: string): Promise<any>;
     /**
      * Performs an asynchronous post call.
      * Returns the url as text or json. Default is JSON.
@@ -52,10 +58,10 @@ export declare class BaseClass {
      * Cancel using cancelRequests()
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param json returns the results as parsed object from json string
+     * @param type type of object to return. default is json object. if null then response object
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
-    postURL(url: string, form: any, options?: any, json?: Boolean): Promise<any>;
+    postURL(url: string, form: any, options?: any, type?: string): Promise<any>;
     /**
      * Makes a request to a url.
      * Returns the url as text or json.
@@ -73,13 +79,19 @@ export declare class BaseClass {
      * var parameters = new URLSearchParams();
      * parameters.set("id", id);
      * var results = await this.requestURL("url?" + parameters.toString() );
+     *
+     * // getting a response object
+     * var response = await this.requestURL("url?" + parameters.toString(), null, null);
+     *
+     * // getting text
+     * var text = await this.requestURL("url?" + parameters.toString(), null, "text");
      * ```
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param json returns the results as json. default is true
+     * @param type returns the results as json or the response object if false. default is true
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
-    requestURL(url: string, options?: any, json?: Boolean): Promise<any>;
+    requestURL(url: string, options?: any, type?: string): Promise<any>;
     /**
      * Attach event listeners here
      * Override in sub classes
