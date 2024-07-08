@@ -90,7 +90,7 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 
 Example with view items inline:  
 ```
-import { BaseClass } from "base-class-ts/BaseClass"
+import { BaseClass } from "base-class-ts"
 
 export class MyClass extends BaseClass {
    userLabel = document.getElementById("userLabel") as HTMLElement;
@@ -106,7 +106,7 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 Example with external view:    
 ```
-import { BaseClass } from "base-class-ts/BaseClass"
+import { BaseClass } from "base-class-ts"
 // your views will always be local to your project
 import * as view from "./ExampleElements.js";
 
@@ -142,9 +142,76 @@ Examples:
 - LoginApp.ts - example of a login app
 - ExampleApp.ts - example adding listeners and loading remote data and displaying it
 - InlineViewApp.ts - example of declaring a view in the same file as the class
--  
 
-It is a work in progress and still has some issues importing. You may need to import the js file. 
+---
+Using Bun to bundle into the same file
+- Install bun (https://bun.sh/docs/installation)
+- open a folder or project in vscode
+- open a terminal in your project
+- import modules with `bun install` (or npm install) 
+- add base-class-ts with `bun add -d base-class-ts`
+- call `bun add -d bun-plugin-html` if you want to bundle typescript in html pages 
+- create bun.buld.js with the contents below
+- call `bun bun.build.js` to build and bundle the typescript (See contents of bun.build.js file)
 
-Until the npm part is figured out, you can copy and paste BaseClass.ts into your project. 
+bun.build.js:  
+```
+import html from 'bun-plugin-html';
+import { Glob } from "bun";
 
+// read in all the typescript files in the /public directory
+// (or the directory where your typescript files are located)
+// and compile them into builded javascript files in the same directory
+// using the same name as the typescript file but with a js extension
+
+const sourceDirectory = "./public/";
+const glob = new Glob('*.ts');
+var entrypoints = [...glob.scanSync(sourceDirectory)];
+entrypoints = entrypoints.map((x) => sourceDirectory + x);
+console.log("Compiling " + entrypoints.length + " typescript files...");
+
+const results = await Bun.build({
+  entrypoints: entrypoints,
+  publicPath: "",
+  sourcemap: "inline",
+  outdir: './',
+  plugins: [
+    html()
+  ],
+});
+
+if (!results.success) {
+  console.error("Build failed");
+  for (const message of results.logs) {
+    console.error(message);
+  }
+}
+else {
+  console.log("Compiled " + results.outputs.length + " javascript files...");
+}
+```
+
+---
+
+This is a work in progress and still has some issues importing. Please post issues on the github issues page. 
+
+If you can't get it figured out you can simply copy and paste BaseClass.ts into your project. 
+
+---
+
+Errors  
+Property 'contentLoaded' in type 'AddItemClass' is not assignable to the same property in base type 'BaseClass'.
+  Type '() => void' is not assignable to type '() => Promise<void>'.
+    Type 'void' is not assignable to type 'Promise<void>'.
+
+Make sure the methods you override match the signiture of the method you are overriding. In the error above instead of using: 
+
+```
+content(): void {
+
+}
+// use
+override async contentLoaded() {
+
+}
+```
