@@ -20,6 +20,7 @@ export class BaseClass {
          try {
             var instance = new ClassReference();
             instance.bindProperties(instance);
+            instance.contentLoaded();
             if (startWith) {
                instance[startWith]();
             }

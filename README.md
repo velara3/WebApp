@@ -136,8 +136,9 @@ export class MyClass extends BaseClass {
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 ---
-ExampleElements.ts:  
+Example of view elements declared directly in an external file. 
 
+ExampleElements.ts:  
 ```javascript
 // import * as view from "./Elements.js";
 export var dialog: HTMLDialogElement = document.querySelector("#dialog") as HTMLDialogElement;
@@ -150,12 +151,24 @@ export var exampleItemRenderer: HTMLElement = document.querySelector("#exampleIt
 export var examplesButton: HTMLElement = document.querySelector("#examplesButton") as HTMLElement;
 ``` 
 
-The `ExampleApp.ts` shows a more advanced example of how to use this class in your web projects.
+Example of declaring view elements in a separate file using a class:  
+```javascript
+export class BaseElements {
+    requestIcon = document.getElementById("requestIcon") as HTMLElement;
+    dialog = document.getElementById("dialog") as HTMLDialogElement;
+    dialogTitle = document.getElementById("dialogTitle") as HTMLElement;
+    dialogMessage = document.getElementById("dialogMessage") as HTMLElement;
+    versionLabel = document.getElementById("versionLabel") as HTMLElement;
+} 
+```
+
+The `ExampleApp.ts` file shows a more advanced example of how to use this class in your web projects.
 
 Examples:
 - LoginApp.ts - example of a login app
 - ExampleApp.ts - example adding listeners and loading remote data and displaying it
 - InlineViewApp.ts - example of declaring a view in the same file as the class
+- ExtendedView.ts - example of declaring a view that extends another view
 
 ---
 You can use Bun to bundle your typescript classes into the same file
