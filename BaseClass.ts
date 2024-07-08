@@ -19,7 +19,7 @@ export class BaseClass {
       window.addEventListener(BaseClass.PAGE_LOADED, (event) => {
          try {
             var instance = new ClassReference();
-            instance.bindProperties(instance);
+            instance.bindProperties(ClassReference);
             instance.contentLoaded();
             if (startWith) {
                instance[startWith]();
