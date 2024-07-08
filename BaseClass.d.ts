@@ -183,6 +183,15 @@ export declare class BaseClass {
      */
     setContent(element: HTMLElement, value: string, tooltip?: any, resetValue?: any, resetTimeout?: number): void;
     /**
+     * Set the text content of a span element
+     * @param element element that will be set
+     * @param value value to set span
+     * @param tooltip value to set tool tip of span (optional)
+     * @param resetValue value to be set after a reset timeout (optional)
+     * @param resetTimeout timeout in milliseconds to reset style to (optional)
+     */
+    setSpan(element: HTMLElement, value: string, tooltip?: any, resetValue?: any, resetTimeout?: number): void;
+    /**
      * Add element to the container.
      * Element can be string or element. If string then the element is created
      * Properties and styles can be set on the element and child elements can be added
