@@ -19,6 +19,7 @@ export class BaseClass {
       window.addEventListener(BaseClass.PAGE_LOADED, (event) => {
          try {
             var instance = new ClassReference();
+            instance.bindProperties(instance);
             if (startWith) {
                instance[startWith]();
             }
@@ -395,8 +396,32 @@ export class BaseClass {
       else if (tooltip) {
          element.title = value;
       }
+
       if (resetValue !== null) {
          setTimeout(this.setContent, resetTimeout, element, resetValue)
+      }
+   }
+
+   /**
+    * Set the text content of a span element
+    * @param element element that will be set 
+    * @param value value to set span
+    * @param tooltip value to set tool tip of span (optional)
+    * @param resetValue value to be set after a reset timeout (optional)
+    * @param resetTimeout timeout in milliseconds to reset style to (optional)
+    */
+   setSpan(element: HTMLElement, value: string, tooltip: any = null, resetValue: any = null, resetTimeout: number = 5000) {
+      element.textContent = value;
+
+      if (typeof tooltip == "string") {
+         element.title = tooltip;
+      }
+      else if (tooltip) {
+         element.title = value;
+      }
+
+      if (resetValue !== null) {
+         setTimeout(this.setSpan, resetTimeout, element, resetValue)
       }
    }
 
@@ -528,7 +553,7 @@ export class BaseClass {
       return binaryBuffer;
    }
 
-   getFileBinaryAtURL(url:string): Promise<Uint8Array> {
+   getFileBinaryAtURL(url: string): Promise<Uint8Array> {
       return new Promise((resolve, reject) => {
          const request = new XMLHttpRequest();
 
@@ -642,7 +667,7 @@ export class BaseClass {
    * Log values to the console
    * @param values values to log
    */
-   log(...values:any[]) {
+   log(...values: any[]) {
       console.log(...values);
    }
 }

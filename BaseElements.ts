@@ -4,5 +4,4 @@ export class BaseElements {
     dialogTitle = document.getElementById("dialogTitle") as HTMLElement;
     dialogMessage = document.getElementById("dialogMessage") as HTMLElement;
     versionLabel = document.getElementById("versionLabel") as HTMLElement;
- }
- 
+}
