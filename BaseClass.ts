@@ -253,13 +253,19 @@ export class BaseClass {
     * @param name name of class
     */
    addClass(element: Element | Array<Element>, name: string) {
+      var elements: any[] = element as any[];
+
       if (element instanceof HTMLElement) {
-         element = [element];
+         elements = [element];
       }
 
-      if (element instanceof Array) {
-         for (let i = 0; i < element.length; i++) {
-            const el = element[i];
+      if ("classList" in element) {
+         elements = [element];
+      }
+
+      if (elements instanceof Array) {
+         for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
             el.classList.add(name);
          }
       }
@@ -271,13 +277,21 @@ export class BaseClass {
     * @param name name of class to remove
     */
    removeClass(element: HTMLElement | Array<HTMLElement>, name: string) {
+      var elements: any[] = element as any[];
+
       if (element instanceof HTMLElement) {
-         element = [element];
+         elements = [element];
       }
 
-      for (let i = 0; i < element.length; i++) {
-         const el = element[i];
-         el.classList.remove(name);
+      if ("classList" in element) {
+         elements = [element];
+      }
+
+      if (elements instanceof Array) {
+         for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
+            el.classList.remove(name);
+         }
       }
    }
 
