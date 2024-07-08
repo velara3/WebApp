@@ -88,13 +88,13 @@ export class MyClass extends BaseClass {
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 
-Example with view items inline:  
+Example with view elements declared inline:  
 ```javascript
 import { BaseClass } from "base-class-ts"
 
 export class MyClass extends BaseClass {
-   userLabel = document.getElementById("userLabel") as HTMLElement;
-   userIcon = document.getElementById("userIcon") as HTMLElement;
+    userLabel = document.getElementById("userLabel") as HTMLElement;
+    userIcon = document.getElementById("userIcon") as HTMLElement;
 
     constructor() {
         super();
@@ -105,7 +105,7 @@ export class MyClass extends BaseClass {
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 
-Example with external view class:    
+Example importing an external view class:    
 ```javascript
 import { BaseClass } from "base-class-ts"
 // your views will always be local to your project
@@ -116,7 +116,6 @@ export class MyClass extends BaseClass {
     constructor() {
         super();
         console.log("Hello world");
-        this.bindProperties(this);
         this.setupEventListeners();
     }
 
@@ -135,7 +134,7 @@ export class MyClass extends BaseClass {
 }
 
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
-
+```
 ---
 ExampleElements.ts:  
 
@@ -151,7 +150,7 @@ export var exampleItemRenderer: HTMLElement = document.querySelector("#exampleIt
 export var examplesButton: HTMLElement = document.querySelector("#examplesButton") as HTMLElement;
 ``` 
 
-The ExampleApp.ts shows a more advanced example of how to use it in your web projects.
+The `ExampleApp.ts` shows a more advanced example of how to use this class in your web projects.
 
 Examples:
 - LoginApp.ts - example of a login app
@@ -159,15 +158,17 @@ Examples:
 - InlineViewApp.ts - example of declaring a view in the same file as the class
 
 ---
-Using Bun to bundle into the same file
+You can use Bun to bundle your typescript classes into the same file
 - Install bun (https://bun.sh/docs/installation)
 - open a folder or project in vscode
 - open a terminal in your project
-- import modules with `bun install` (or npm install) 
 - add base-class-ts with `bun add -d base-class-ts`
 - call `bun add -d bun-plugin-html` if you want to bundle typescript in html pages 
+- optionally import other existing modules with `bun install` (or npm install) 
 - create bun.buld.js with the contents below
 - call `bun bun.build.js` to build and bundle the typescript (See contents of bun.build.js file)
+
+Your typescript classes will be transpiled into a javascript file that bundles all of your typescript. (See https://bun.sh/) 
 
 bun.build.js:  
 ```javascript
@@ -178,6 +179,7 @@ import { Glob } from "bun";
 // (or the directory where your typescript files are located)
 // and compile them into builded javascript files in the same directory
 // using the same name as the typescript file but with a js extension
+// your html pages should reference the javascript file 
 
 const sourceDirectory = "./public/";
 const glob = new Glob('*.ts');
@@ -208,12 +210,12 @@ else {
 
 ---
 
-This is a work in progress and still has some issues importing. Please post issues on the github issues page. 
+This is a work in progress and still has some issues. Please post issues on the github issues page. https://github.com/velara3/WebApp/issues 
 
-If you can't get it figured out you can simply copy and paste BaseClass.ts into your project. 
+If you can't get it figured out you can simply copy and paste BaseClass.ts into your project and import it using ES module syntax. 
 
 ---
-VSCode can run commands on build (command + shift + b). 
+VSCode can run commands on build (command + shift + b). The following task will run `bun bun.build.js` when you build your project. 
 
 Enter commands in your vscode `tasks.json`;  
 ```json
