@@ -31,7 +31,7 @@ The main class to extend is BaseClass.ts.
 The view classes you define and you can use the BaseElements.ts class as a template to learn from.
 
 HTML page:  
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,7 +51,7 @@ HTML page:
 ```
 
 Basic Example: 
-```
+```javascript
 import { BaseClass } from "base-class-ts/BaseClass"
 
 export class MyClass extends BaseClass {
@@ -66,7 +66,7 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 
 Basic Example with view class: 
-```
+```javascript
 import { BaseClass } from "base-class-ts/BaseClass"
 
 // you define the view elements that your project needs
@@ -89,7 +89,7 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 
 Example with view items inline:  
-```
+```javascript
 import { BaseClass } from "base-class-ts"
 
 export class MyClass extends BaseClass {
@@ -104,8 +104,9 @@ export class MyClass extends BaseClass {
 
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
-Example with external view:    
-```
+
+Example with external view class:    
+```javascript
 import { BaseClass } from "base-class-ts"
 // your views will always be local to your project
 import * as view from "./ExampleElements.js";
@@ -134,6 +135,20 @@ export class MyClass extends BaseClass {
 }
 
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
+
+---
+ExampleElements.ts:  
+
+```javascript
+// import * as view from "./Elements.js";
+export var dialog: HTMLDialogElement = document.querySelector("#dialog") as HTMLDialogElement;
+export var requestIcon: HTMLElement = document.querySelector("#requestIcon") as HTMLElement;
+export var versionLabel: HTMLElement = document.querySelector("#versionLabel") as HTMLElement;
+export var dialogTitle: HTMLElement = document.querySelector("#dialogTitle") as HTMLElement;
+export var dialogMessage: HTMLElement = document.querySelector("#dialogMessage") as HTMLElement;
+export var exampleGrid = document.querySelector("#exampleGrid") as HTMLElement;
+export var exampleItemRenderer: HTMLElement = document.querySelector("#exampleItemRenderer") as HTMLElement;
+export var examplesButton: HTMLElement = document.querySelector("#examplesButton") as HTMLElement;
 ``` 
 
 The ExampleApp.ts shows a more advanced example of how to use it in your web projects.
@@ -155,7 +170,7 @@ Using Bun to bundle into the same file
 - call `bun bun.build.js` to build and bundle the typescript (See contents of bun.build.js file)
 
 bun.build.js:  
-```
+```javascript
 import html from 'bun-plugin-html';
 import { Glob } from "bun";
 
@@ -198,8 +213,30 @@ This is a work in progress and still has some issues importing. Please post issu
 If you can't get it figured out you can simply copy and paste BaseClass.ts into your project. 
 
 ---
+VSCode can run commands on build (command + shift + b). 
+
+Enter commands in your vscode `tasks.json`;  
+```json
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "run Bun",
+			"type": "shell",
+			"command": "bun bun.build.js",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
+```
+
+---
 
 Errors  
+
 Property 'contentLoaded' in type 'AddItemClass' is not assignable to the same property in base type 'BaseClass'.
   Type '() => void' is not assignable to type '() => Promise<void>'.
     Type 'void' is not assignable to type 'Promise<void>'.
