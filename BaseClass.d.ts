@@ -124,6 +124,7 @@ export declare class BaseClass {
      * @param callback Callback after user clicks ok or exits from dialog
      */
     showDialog(title: string, value: string, callback?: any): void;
+    closeAllDialogs(): void;
     /**
      * Close dialog event handler
      */
@@ -131,7 +132,7 @@ export declare class BaseClass {
     /**
      * Closs dialog if dialog is open. Calls dialog callback if defined
      */
-    closeDialog(): void;
+    closeDialog(dialog?: HTMLDialogElement): void;
     /**
      * Add a class to an element or an array of elements
      * @param element element or elements to add a class to

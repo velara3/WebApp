@@ -244,6 +244,10 @@ export class BaseClass {
       }
    }
 
+   closeAllDialogs() {
+
+   }
+
    /**
     * Close dialog event handler
     */
@@ -254,13 +258,16 @@ export class BaseClass {
    /**
     * Closs dialog if dialog is open. Calls dialog callback if defined
     */
-   closeDialog() {
-      if (this.dialog) {
-         this.removeClass(this.dialog, "display");
-         this.dialog.close();
+   closeDialog(dialog?: HTMLDialogElement) {
+      var specifiedDialog = dialog || this.dialog;
+
+      if (specifiedDialog) {
+         this.removeClass(specifiedDialog, "display");
+         specifiedDialog.close();
       }
+
       if (this.dialogCallback) {
-         this.dialogCallback();
+         this.dialogCallback(specifiedDialog);
       }
    }
 
