@@ -14,7 +14,7 @@ export class BaseClass {
    versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
    dialogCallback?: Function;
    requestsInProgress: number = 0;
-   localClassReference: object | undefined;
+   localClassReference: any | undefined;
    static PAGE_LOADED: string = "DOMContentLoaded";
 
    constructor() {
@@ -759,13 +759,13 @@ export class BaseClass {
    }
    
    addDefaultStyles(overwrite:boolean = false) {
-      var defaultStylesheetId = this.localClassReference?.constructor + "-DefaultStylesheet";
+      var defaultStylesheetId = this.localClassReference?.name + "DefaultStylesheet";
       var stylesheetExists = document.getElementById(defaultStylesheetId);
       
+      // check to prevent adding multiple times
       if (overwrite || stylesheetExists==null) {
          var defaultStyles = document.createElement("style");
          defaultStyles.setAttribute("id", defaultStylesheetId);
-         // check to prevent adding multiple times
          defaultStyles.innerHTML = this.defaultCSS;
          document.head.insertAdjacentElement('beforeend', defaultStyles);
       }
@@ -802,13 +802,12 @@ export class BaseClass {
 export function getStartOptions(): StartOptions {
 
   return {
-   startWith: "start",
    addStyles: true, 
    bindProperties: true
   }
 }
 export type StartOptions =  {
-   startWith: string, 
+   startWith?: string, 
    addStyles: boolean, 
    bindProperties: boolean
 }

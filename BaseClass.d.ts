@@ -14,7 +14,7 @@ export declare class BaseClass {
     versionLabel: HTMLElement;
     dialogCallback?: Function;
     requestsInProgress: number;
-    localClassReference: object | undefined;
+    localClassReference: any | undefined;
     static PAGE_LOADED: string;
     constructor();
     static startWhenReady(ClassReference: any, options?: StartOptions): void;
@@ -289,7 +289,7 @@ export declare class BaseClass {
 */
 export declare function getStartOptions(): StartOptions;
 export type StartOptions = {
-    startWith: string;
+    startWith?: string;
     addStyles: boolean;
     bindProperties: boolean;
 };
