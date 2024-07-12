@@ -1,14 +1,19 @@
 export class BaseClass {
    showClass: string = "display";
    hideClass: string = "noDisplay";
-   requestsInProgress: number = 0;
+   requestIconSelector: string = "#requestIcon";
+   dialogSelector: string = "#dialog";
+   dialogTitleSelector: string = "#dialogTitle";
+   dialogMessageSelector: string = "#dialogMessage";
+   versionLabelSelector: string = "#versionLabel";
    controllers: Map<number, AbortController> = new Map();
-   requestIcon: HTMLElement = document.getElementById("requestIcon") as HTMLElement;
-   dialog: HTMLDialogElement = document.getElementById("dialog") as HTMLDialogElement;
-   dialogTitle: HTMLElement = document.getElementById("dialogTitle") as HTMLElement;
-   dialogMessage: HTMLElement = document.getElementById("dialogMessage") as HTMLElement;
-   versionLabel: HTMLElement = document.getElementById("versionLabel") as HTMLElement;
+   requestIcon: HTMLElement = document.querySelector(this.requestIconSelector) as HTMLElement;
+   dialog: HTMLDialogElement = document.querySelector(this.dialogSelector) as HTMLDialogElement;
+   dialogTitle: HTMLElement = document.querySelector(this.dialogTitleSelector) as HTMLElement;
+   dialogMessage: HTMLElement = document.querySelector(this.dialogMessageSelector) as HTMLElement;
+   versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
    dialogCallback?: Function;
+   requestsInProgress: number = 0;
    static PAGE_LOADED: string = "DOMContentLoaded";
 
    constructor() {
@@ -708,5 +713,10 @@ export class BaseClass {
    */
    log(...values: any[]) {
       console.log(...values);
+   }
+
+   displayErrors() {
+      var output = "";
+
    }
 }

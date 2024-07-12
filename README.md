@@ -248,6 +248,41 @@ Enter commands in your vscode `tasks.json`;
 }
 ```
 
+CSS:  
+There are a few CSS classes that this workflow relies on. Please add them to your stylesheet. 
+
+```
+.display {
+    display: block !important;
+}
+.noDisplay {
+    display: none !important;
+}
+.center { 
+   left: 50%;
+   top: 50%;
+   transform: translateX(-50%) translateY(-50%);
+}
+dialog:focus {
+    outline: none;
+}
+dialog::backdrop {
+   background: rgba(0,0,0,.25);
+}
+```
+
+The BaseClass also uses the following naming conventions for the CSS classes, dialog and the network icon to find and reference these elements. Update them in your sub classes if you need to and ensure they are on the page.  
+
+```javascript
+   showClass: string = "display";
+   hideClass: string = "noDisplay";
+   requestIconSelector: string = "#requestIcon";
+   dialogSelector: string = "#dialog";
+   dialogTitleSelector: string = "#dialogTitle";
+   dialogMessageSelector: string = "#dialogMessage";
+   versionLabelSelector: string = "#versionLabel";
+```
+
 ---
 
 Errors  
