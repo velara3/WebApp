@@ -3,7 +3,7 @@ export declare class ExampleApp extends BaseClass {
     examplesData: Record<string, any>;
     renderers: Record<string, any>;
     constructor();
-    contentLoaded(): Promise<void>;
+    start(): Promise<void>;
     setupEventListeners(): void;
     getExamplesHandler(event: Event): Promise<void>;
     getExampleData(): Promise<void>;

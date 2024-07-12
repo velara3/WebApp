@@ -16,14 +16,14 @@ export class HomeClass extends BaseClass {
 
       try {
          this.bindProperties(HomeClass);
-         this.contentLoaded();
+         this.start();
       }
       catch(error) {
          this.log(error);
       }
    }
 
-   override async contentLoaded() {
+   override async start() {
       this.bindProperties(HomeClass);
       this.getUser();
    }

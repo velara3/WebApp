@@ -7,7 +7,7 @@ export class ExampleApp extends BaseClass {
       super();
    }
 
-   override async contentLoaded() {
+   override async start() {
 
       try {
          this.log(this.message);

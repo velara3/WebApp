@@ -14,21 +14,17 @@ export class BaseClass {
    versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
    dialogCallback?: Function;
    requestsInProgress: number = 0;
+   localClassReference: object | undefined;
    static PAGE_LOADED: string = "DOMContentLoaded";
 
    constructor() {
 
    }
 
-   static startWhenReady(ClassReference: any, startWith?: string) {
+   static startWhenReady(ClassReference: any, options?: StartOptions) {
       window.addEventListener(BaseClass.PAGE_LOADED, (event) => {
          try {
-            var instance = new ClassReference();
-            instance.bindProperties(ClassReference);
-            instance.contentLoaded();
-            if (startWith) {
-               instance[startWith]();
-            }
+            BaseClass.start(ClassReference, options);
          }
          catch (error) {
             console.error(error);
@@ -37,10 +33,53 @@ export class BaseClass {
    }
 
    /**
-    * Override and call this method for async 
+    * Static method that creates an instance of your class and then calls the instance start() method
+    * @param ClassReference Reference to your class that extends BaseClass
+    * @param options StartOptions
+    * @returns instance of your class
     */
-   async contentLoaded() {
-      this.bindProperties(BaseClass);
+   static start(ClassReference: any, options?: StartOptions) {
+      var instance = new ClassReference();
+      instance.localClassReference = ClassReference;
+      
+      var defaultOptions = getStartOptions();
+      if (options) {
+         Object.assign(defaultOptions, options);
+      }
+
+      instance.applyOptions(defaultOptions);
+      instance.start();
+
+      return instance;
+   }
+
+   /**
+    * Override and call this method for startup
+    */
+   async start() {
+
+   }
+
+   /**
+    * Set some start up options
+    * @param options 
+    */
+   applyOptions(options?: StartOptions) {
+
+      if (options?.bindProperties) {
+         this.bindProperties(this.localClassReference);
+      }
+
+      if (options?.addStyles) {
+         this.addDefaultStyles();
+      }
+
+      if (options?.startWith) {
+         var value = options.startWith;
+         // @ts-ignore
+         this[value]();
+      }
+
    }
 
    /**
@@ -717,6 +756,59 @@ export class BaseClass {
 
    displayErrors() {
       var output = "";
-
    }
+   
+   addDefaultStyles(overwrite:boolean = false) {
+      var defaultStylesheetId = this.localClassReference?.constructor + "-DefaultStylesheet";
+      var stylesheetExists = document.getElementById(defaultStylesheetId);
+      
+      if (overwrite || stylesheetExists==null) {
+         var defaultStyles = document.createElement("style");
+         defaultStyles.setAttribute("id", defaultStylesheetId);
+         // check to prevent adding multiple times
+         defaultStyles.innerHTML = this.defaultCSS;
+         document.head.insertAdjacentElement('beforeend', defaultStyles);
+      }
+   }
+
+   /**
+    * Default CSS added to the page necessary for some functionality
+    */
+   defaultCSS = 
+   `.display {
+       display: block !important;
+   }
+   .noDisplay {
+       display: none !important;
+   }
+   .center { 
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+   }
+   dialog:focus {
+       outline: none;
+   }
+   dialog::backdrop {
+      background: rgba(0,0,0,.25);
+   }`;
+}
+
+
+/**
+* Returns a new instance of a start options
+* @returns TextRange
+*/
+export function getStartOptions(): StartOptions {
+
+  return {
+   startWith: "start",
+   addStyles: true, 
+   bindProperties: true
+  }
+}
+export type StartOptions =  {
+   startWith: string, 
+   addStyles: boolean, 
+   bindProperties: boolean
 }

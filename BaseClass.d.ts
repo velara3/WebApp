@@ -14,13 +14,26 @@ export declare class BaseClass {
     versionLabel: HTMLElement;
     dialogCallback?: Function;
     requestsInProgress: number;
+    localClassReference: object | undefined;
     static PAGE_LOADED: string;
     constructor();
-    static startWhenReady(ClassReference: any, startWith?: string): void;
+    static startWhenReady(ClassReference: any, options?: StartOptions): void;
     /**
-     * Override and call this method for async
+     * Static method that creates an instance of your class and then calls the instance start() method
+     * @param ClassReference Reference to your class that extends BaseClass
+     * @param options StartOptions
+     * @returns instance of your class
      */
-    contentLoaded(): Promise<void>;
+    static start(ClassReference: any, options?: StartOptions): any;
+    /**
+     * Override and call this method for startup
+     */
+    start(): Promise<void>;
+    /**
+     * Set some start up options
+     * @param options
+     */
+    applyOptions(options?: StartOptions): void;
     /**
      * Check the query
      */
@@ -264,4 +277,19 @@ export declare class BaseClass {
     */
     log(...values: any[]): void;
     displayErrors(): void;
+    addDefaultStyles(overwrite?: boolean): void;
+    /**
+     * Default CSS added to the page necessary for some functionality
+     */
+    defaultCSS: string;
 }
+/**
+* Returns a new instance of a start options
+* @returns TextRange
+*/
+export declare function getStartOptions(): StartOptions;
+export type StartOptions = {
+    startWith: string;
+    addStyles: boolean;
+    bindProperties: boolean;
+};

@@ -1,8 +1,6 @@
 import * as view from "./ExampleElements.js";
 import { BaseClass } from "./BaseClass.js";
 
-window.addEventListener(BaseClass.PAGE_LOADED, ()=> { new ExampleApp().contentLoaded() })
-
 export class ExampleApp extends BaseClass {
    examplesData: Record<string, any> = {};
    renderers: Record<string, any> = {};
@@ -11,7 +9,7 @@ export class ExampleApp extends BaseClass {
       super();
    }
 
-   override async contentLoaded() {
+   override async start() {
 
       try {
          this.bindProperties(ExampleApp);
@@ -125,4 +123,5 @@ export class ExampleApp extends BaseClass {
    }
 }
 
+BaseClass.startWhenReady(ExampleApp);
 export {};
