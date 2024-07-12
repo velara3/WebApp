@@ -1,7 +1,11 @@
 export declare class BaseClass {
     showClass: string;
     hideClass: string;
-    requestsInProgress: number;
+    requestIconSelector: string;
+    dialogSelector: string;
+    dialogTitleSelector: string;
+    dialogMessageSelector: string;
+    versionLabelSelector: string;
     controllers: Map<number, AbortController>;
     requestIcon: HTMLElement;
     dialog: HTMLDialogElement;
@@ -9,6 +13,7 @@ export declare class BaseClass {
     dialogMessage: HTMLElement;
     versionLabel: HTMLElement;
     dialogCallback?: Function;
+    requestsInProgress: number;
     static PAGE_LOADED: string;
     constructor();
     static startWhenReady(ClassReference: any, startWith?: string): void;
@@ -258,4 +263,5 @@ export declare class BaseClass {
     * @param values values to log
     */
     log(...values: any[]): void;
+    displayErrors(): void;
 }
