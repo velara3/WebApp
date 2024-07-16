@@ -41,6 +41,12 @@ export class BaseClass {
    static start(ClassReference: any, options?: StartOptions) {
       var instance = new ClassReference();
       instance.localClassReference = ClassReference;
+
+      // save reference to our instance
+      if (options?.storeReference) {
+         this.instances.push(instance);
+         this.instancesMap.set(instance.constructor, instance);
+      }
       
       var defaultOptions = getStartOptions();
       if (options) {
@@ -52,6 +58,9 @@ export class BaseClass {
 
       return instance;
    }
+
+   static instances: Array<BaseClass> = [];
+   static instancesMap: Map<string, BaseClass> = new Map();
 
    /**
     * Override and call this method for startup
@@ -772,7 +781,8 @@ export class BaseClass {
    }
 
    /**
-    * Default CSS added to the page necessary for some functionality
+    * Default CSS added to the page necessary for some functionality. 
+    * You can add to this string in your sub class
     */
    defaultCSS = 
    `.display {
@@ -803,11 +813,13 @@ export function getStartOptions(): StartOptions {
 
   return {
    addStyles: true, 
-   bindProperties: true
+   bindProperties: true,
+   storeReference: true
   }
 }
 export type StartOptions =  {
    startWith?: string, 
    addStyles: boolean, 
-   bindProperties: boolean
+   bindProperties: boolean,
+   storeReference: boolean
 }

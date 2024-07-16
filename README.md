@@ -1,16 +1,24 @@
 # WebApp
-This is a base class for web applications using object oriented programming (OOP), Typescript and modules client side. It is not a framework and it is not functional programming or scripting. It is meant to be a vanilla approach to web site using imports and modules. It merely gives you a scalfold to setup and start your project. It separates the view out so that as it changes (and it will), those changes do not affect the functionality of the web project.
+This is a base class for web applications using object oriented programming (OOP), Typescript and modules client side. It is not a framework and it is not functional programming or scripting. It is meant to be a vanilla approach to assembling a web page or a single page application using imports and modules. It merely gives you a scalfold to setup and start your web page project. It gives you a way to organize your code in the world of imports, external packages and modules. It separates the views so that as it changes (and it will), those changes do not affect the functionality of the project. It is also organized and written in this manner so that development tools can provide code completion, code assistance, import and export and more. It also provides some reusable functionality. 
 
-Setup is easy. You add and reference a Javascript or Typescript module in your web page (let's say index.ts / index.js). In that document you extend the BaseClass.ts in this project. Then you add your code in the constructor of your class or better yet in the contentLoaded() function. At the end of your class after it is closed add a call to `BaseClass.startWhenReady(MyClass)` (or if you want, create an instance and then call `instance.bindProperties(instance)`). Your class is then created when the page loads. 
+Setup is easy. You create your main class file in your project. This is a Typescript or Javascript file (.ts or .js). You add a reference to that Javascript or Typescript file in your web page (let's say index.ts or index.js). In your main class you extend the BaseClass.ts in this project (add from npm). Then you add your code in the start method of your class. At the end of your class after it is closed add a call to `BaseClass.startWhenReady(MyClass)` (or if you want, create an instance and then call `instance.bindProperties(instance)`). Your class is then created when the page loads. 
 
-If you have multiple views, you write your view class that gets the web elements and then import that view class into the module so your class can work with it. The views are project dependent. You define them. 
+For the view, you create a view class or declare one inline in the main class. You add references to any UI elements in that class. Then you import that class into your main class.  
+
+Your view class gets the web elements. The view class and the UI elements are project dependent. You define them. 
+
+Why use this? Why was this built?  
+It defines a structure to web page code. It is easy to maintain and modify. It speeds up development. It prevents scope issues. It helps displaying dialogs and messages. It works well with remote data. It works well with creating and repeating elements (like posts on a social media site - item renderers). It works well with importing npm packages client side. You can create and switch to multiple views on the same page. It works well with tools that export web pages from design tools. It provides some common reusable code that has been shown to be common across projects. Additionally, VSCode would not provide any of it's code editor benefits unless it was written in this way (which fortunately, still happens to be a very OOP approach). 
+
+If you have attempted to create a web page project with JavaScript or Typescript and maintain it you will know why this project has been built. If you have come from the desktop development world where you can easily add libraries to your project you will know why this project has been built. This project was created after a year of making web pages and single page applications using vanilla Javascript and much longer in the web development ecosystem. 
+
 
 It supports: 
 - working with separate views - keep your views separate and import them
 - async and cancelable get and post methods
 - upload methods
 - download methods
-- displaying dialog methods
+- displaying custom dialog methods
 - base css styles
 - hiding and showing elements
 - unhiding and rehiding elements
@@ -18,17 +26,20 @@ It supports:
 - checking the url fragments
 - updating the url query history
 - updating the url fragment history
+- showing an network icon when requests are made
+- uses one line fetch calls
 
 It adds a basic object oriented framework to start from. 
 
-- You extend the class adding any imports you need
+- You extend the base class adding any methods and imports you need
 - You import any view classes
-- Your class starts running code in the contentLoaded() function 
+- You import any external packages or modules
+- Your class starts running code in the start() function 
 - Your class adds event listeners in the setupEventListeners() function
-- You add a call to BaseClass.startWhenReady(MyClass) to start the class / application
+- You add a call to BaseClass.startWhenReady(MyClass) or BaseClass.start(MyClass) to start the class / application
 
-The main class to extend is BaseClass.ts.   
-The view classes you define and you can use the BaseElements.ts class as a template to learn from.
+The main class to extend is `BaseClass.t`s.   
+You define the view classes or view elements. You can use the BaseElements.ts class as a template to learn from.
 
 HTML page:  
 ```html
@@ -43,22 +54,28 @@ HTML page:
 
 <body>
     <h1 id="header">Hello World</h1>
-    <script type="module" src="index.js">
-    </script>
 </body>
+
+<script type="module" src="index.js">
+</script>
 
 </html>
 ```
 
 Basic Example: 
 ```javascript
-import { BaseClass } from "base-class-ts/BaseClass"
+import { BaseClass } from "base-class-ts"
 
 export class MyClass extends BaseClass {
 
     constructor() {
         super();
+    }
+
+    // place your code here
+    override async start() {
         console.log("Hello world");
+        console.log("Start method");
     }
 }
 
@@ -67,21 +84,27 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 
 Basic Example with view class: 
 ```javascript
-import { BaseClass } from "base-class-ts/BaseClass"
+import { BaseClass } from "base-class-ts"
 
 // you define the view elements that your project needs
 class UserView {
-   userLabel = document.getElementById("userLabel") as HTMLElement;
-   userIcon = document.getElementById("userIcon") as HTMLElement;
+   header = document.getElementById("header") as HTMLElement;
 }
 
+// create an instance of the view to use and reference it in your class
 var userView = new UserView();
 
 export class MyClass extends BaseClass {
 
     constructor() {
         super();
+    }
+
+    // place your code here
+    override async start() {
         console.log("Hello world");
+        console.log("Start method");
+        userView.header;
     }
 }
 
@@ -93,12 +116,18 @@ Example with view elements declared inline:
 import { BaseClass } from "base-class-ts"
 
 export class MyClass extends BaseClass {
-    userLabel = document.getElementById("userLabel") as HTMLElement;
-    userIcon = document.getElementById("userIcon") as HTMLElement;
+    header = document.getElementById("header") as HTMLElement;
 
     constructor() {
         super();
         console.log("Hello world");
+    }
+
+    // place your code here
+    override async start() {
+        console.log("Hello world");
+        console.log("Start method");
+        this.userLabel;
     }
 }
 
@@ -108,17 +137,25 @@ BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 Example importing an external view class:    
 ```javascript
 import { BaseClass } from "base-class-ts"
-// your views will always be local to your project
+
+// import an external view 
+// your views will always be local to your project - add the ./ before the file name
 import * as view from "./ExampleElements.js";
 
 export class MyClass extends BaseClass {
 
     constructor() {
         super();
+    }
+
+    // place your code here
+    override async start() {
         console.log("Hello world");
+        console.log("Start method");
         this.setupEventListeners();
     }
 
+    // setup event listeners in this method
     override setupEventListeners(): void {
       try {
          view.examplesButton.addEventListener("click", this.getExamplesHandler);
@@ -136,16 +173,111 @@ export class MyClass extends BaseClass {
 BaseClass.startWhenReady(MyClass); // starts on window DOMContentLoaded
 ```
 ---
-Example of view elements declared directly in an external file. 
+View elements
+
+View elements or UI elements can be referenced in multiple ways. In external files they can be declared directly in an external file and imported using a wildcard or they can be declared as members of a class and the class can be imported and instantiated.
+
+It might be simpler to declare all elements in a view directly. There is no class declaration and there is no need to create an instance of the class. 
+
+```js
+// my-view.js
+export var dialog: HTMLDialogElement = document.querySelector("#dialog") as HTMLDialogElement;
+export var progressBarLabel: HTMLElement = document.querySelector("#progressBarLabel") as HTMLElement;
+
+// my-main-class.js
+import * as view from "./my-view.js";
+
+console.log(view.dialog); // reference to dialog (as long as dialog exists)
+```
+
+Declaring as a class:  
+```js
+// my-view.js
+export class MyView {
+    dialog: HTMLDialogElement = document.querySelector("#dialog") as HTMLDialogElement;
+    progressBarLabel: HTMLElement = document.querySelector("#progressBarLabel") as HTMLElement;
+}
+
+// my-main-class.js
+import { MyView } from "./MyView.js";
+var view = new MyView();
+
+console.log(view.dialog); // reference to dialog (as long as dialog exists)
+```
+
+Either way works but the class method may be slightly better for large projects or if you need or use inherited views. But it's trivial to convert a direct reference file to a class if you need it. 
+
+As opposed to external files UI elements can be declared directly inline in the main file.  
+
+View class declared in the main class:  
+```js
+import { BaseClass } from "base-class-ts";
+
+// view declared as a class
+class View {
+   userLabel = document.getElementById("userLabel") as HTMLElement;
+}
+
+// you must instantiate the class 
+var view = new View();
+
+export class HomeClass extends BaseClass {
+
+   constructor() {
+      super();
+   }
+}
+
+BaseClass.startWhenReady(HomeClass);
+```
+
+View elements declared directly in the main class:  
+```js
+import { BaseClass } from "base-class-ts";
+
+// view items declared directly 
+var userLabel = document.getElementById("userLabel") as HTMLElement;
+
+export class HomeClass extends BaseClass {
+
+   constructor() {
+      super();
+   }
+}
+
+BaseClass.startWhenReady(HomeClass);
+```
+
+View elements declared inside the main class:  
+```js
+import { BaseClass } from "base-class-ts";
+
+export class HomeClass extends BaseClass {
+    // view items declared directly 
+    userLabel = document.getElementById("userLabel") as HTMLElement;
+
+    constructor() {
+        super();
+    }
+}
+
+BaseClass.startWhenReady(HomeClass);
+```
+
+
+Example View classes:  
+
 
 ExampleElements.ts:  
 ```javascript
-// import * as view from "./Elements.js";
+// elements can be declared directly as exports and imported using a wildcard 
+// your project will have it's own elements with the names you give them
 export var dialog: HTMLDialogElement = document.querySelector("#dialog") as HTMLDialogElement;
 export var requestIcon: HTMLElement = document.querySelector("#requestIcon") as HTMLElement;
 export var versionLabel: HTMLElement = document.querySelector("#versionLabel") as HTMLElement;
 export var dialogTitle: HTMLElement = document.querySelector("#dialogTitle") as HTMLElement;
 export var dialogMessage: HTMLElement = document.querySelector("#dialogMessage") as HTMLElement;
+
 export var exampleGrid = document.querySelector("#exampleGrid") as HTMLElement;
 export var exampleItemRenderer: HTMLElement = document.querySelector("#exampleItemRenderer") as HTMLElement;
 export var examplesButton: HTMLElement = document.querySelector("#examplesButton") as HTMLElement;
@@ -161,10 +293,80 @@ export class BaseElements {
     versionLabel = document.getElementById("versionLabel") as HTMLElement;
 } 
 ```
+Example creating a view that extends another view:  
+```js
+import { ViewElements } from "./view-elements.js";
 
-The `ExampleApp.ts` file shows a more advanced example of how to use this class in your web projects.
+export class CreateElements extends ViewElements {
+   createButton = document.getElementById("createButton") as HTMLElement;
+}
+``` 
 
-Examples:
+---
+Making Requests  
+Using fetch and XMLHttpRequests can be a high learning curve. In this class you can use one line to get or post data to the server using the `requestURL()` method or one of it's wrapper methods like, `getURL` and `postURL`. 
+
+In the past you used XML HTTP Requests like so:  
+```js
+this.request = new XMLHttpRequest();
+this.request.addEventListener('load', this.loadHandler);
+this.request.addEventListener('error', this.errorHandler);
+this.request.addEventListener("abort", () => { this.log("abort") });
+this.request.addEventListener("loadstart", () => { this.log("loadstart") });
+this.request.addEventListener("loadend", () => { this.log("loadend") });
+this.request.addEventListener("progress", () => { this.log("progress") });
+this.request.addEventListener("readystatechange", () => { this.log("readystatechange") });
+this.request.open('POST', '/data', true);
+this.request.send(formData);
+```
+
+With fetch and this class you can make the same calls in one line or a few lines with try catch. 
+```js
+try {
+    var data = await this.getURL("/data");
+}
+catch(error) {
+    this.log("Error", error);
+}
+```
+These methods include get, post, upload and download using asynchronous syntax. The methods `getUrl` and `postURL` both extend `requestURL`. These methods are cancelable and they automatically show the request icon if it is defined while calls are being made. The results is a JSON object or another type or response can be returned. 
+
+```js
+async example() {
+    var url = "url";
+    var data = await getURL(url);
+    var data = await postURL(url);
+    var data = await requestURL(url);
+}
+```
+The method `getURL()` is equivalent to this: 
+```js
+// this...
+var data = await this.getURL("/data");
+
+// ...is about the same as this
+var response = await fetch("/data");
+var data = await response.json();
+```
+
+The method `postURL()` is equivalent to this: 
+```js
+// this...
+var data = await this.postURL("/data", {data: "some data"});
+
+// ...is about the same as this
+var response = await fetch("/data", {method: "post", bodh: {data: "some data"}});
+var data = await response.json();
+```
+
+Note: It is recommended to wrap all requests calls in a `try catch` block, or have the parent method wrapped in a `try catch` block. 
+
+---
+Examples  
+The`LoginApp.ts` and the `ExampleApp.ts` file shows a more advanced example of how to use this class in your web projects. These examples do not have HTML pages but are designed to work with HTML pages. 
+
+More Examples:
+- BasicExample.ts - basic bare bones example
 - LoginApp.ts - example of a login app
 - ExampleApp.ts - example adding listeners and loading remote data and displaying it
 - InlineViewApp.ts - example of declaring a view in the same file as the class
@@ -192,7 +394,11 @@ import { Glob } from "bun";
 // (or the directory where your typescript files are located)
 // and compile them into builded javascript files in the same directory
 // using the same name as the typescript file but with a js extension
-// your html pages should reference the javascript file 
+// your HTML pages should reference the javascript file 
+
+// note: you could also pass in one or all of the HTML files
+// but if you do that the HTML file might be ovewrritten
+// set an output directory in the options 
 
 const sourceDirectory = "./public/";
 const glob = new Glob('*.ts');
@@ -223,12 +429,13 @@ else {
 
 ---
 
-This is a work in progress and still has some issues. Please post issues on the github issues page. https://github.com/velara3/WebApp/issues 
+This is a work in progress. Please post issues and improvements on the github issues page. https://github.com/velara3/WebApp/issues 
 
 If you can't get it figured out you can simply copy and paste BaseClass.ts into your project and import it using ES module syntax. 
 
 ---
-VSCode can run commands on build (command + shift + b). The following task will run `bun bun.build.js` when you build your project. 
+Setting up Build Tasks
+VSCode can run commands on build (command + shift + b). The following task will run `bun bun.build.js` when you build your project. In the `.vscode` directory in the root of the project create a file named `tasks.json`. If the `.vscode` directory doesn't exist you can create it. 
 
 Enter commands in your vscode `tasks.json`;  
 ```json
@@ -249,9 +456,9 @@ Enter commands in your vscode `tasks.json`;
 ```
 
 CSS:  
-There are a few CSS classes that this workflow relies on. Please add them to your stylesheet. 
+There are a few CSS classes that this workflow relies on. They are added by default. You can exclude them by setting the startup options. 
 
-```
+```CSS
 .display {
     display: block !important;
 }
@@ -271,7 +478,7 @@ dialog::backdrop {
 }
 ```
 
-The BaseClass also uses the following naming conventions for the CSS classes, dialog and the network icon to find and reference these elements. Update them in your sub classes if you need to and ensure they are on the page.  
+The BaseClass also uses the following naming for the CSS classes, dialog and the network icon to find and reference these elements. Update them in your sub classes if you need to and ensure elements with these ids or classes are on the HTML page.  
 
 ```javascript
    showClass: string = "display";
@@ -281,6 +488,18 @@ The BaseClass also uses the following naming conventions for the CSS classes, di
    dialogTitleSelector: string = "#dialogTitle";
    dialogMessageSelector: string = "#dialogMessage";
    versionLabelSelector: string = "#versionLabel";
+   defaultCSS: string = ... // default css. in sub classes append your own rather than overwrite 
+```
+The startup options type allows you to configure what options are enabled when creating your class. 
+
+```
+export type StartOptions =  {
+   startWith?: string, /* a method to call after the class is created */
+   addStyles: boolean, /* adds the basic styles needed for some functionality */ 
+   bindProperties: boolean /* binds the class members to the class for the this keyword */
+}
+
+BaseClass.startWhenRead(MyClass, {addStyles: true});
 ```
 
 ---

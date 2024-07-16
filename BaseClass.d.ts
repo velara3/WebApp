@@ -279,7 +279,8 @@ export declare class BaseClass {
     displayErrors(): void;
     addDefaultStyles(overwrite?: boolean): void;
     /**
-     * Default CSS added to the page necessary for some functionality
+     * Default CSS added to the page necessary for some functionality.
+     * You can add to this string in your sub class
      */
     defaultCSS: string;
 }
