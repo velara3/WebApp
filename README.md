@@ -32,6 +32,8 @@ It supports:
 
 It adds a basic object oriented framework to start from. 
 
+#Overview
+
 - You extend the base class adding any methods and imports you need
 - You import any view classes
 - You import any external packages or modules
@@ -39,10 +41,12 @@ It adds a basic object oriented framework to start from.
 - Your class adds event listeners in the setupEventListeners() function
 - You add a call to BaseClass.startWhenReady(MyClass) or BaseClass.start(MyClass) to start the class / application
 
-The main class to extend is `BaseClass.t`s.   
-You define the view classes or view elements. You can use the BaseElements.ts class as a template to learn from.
+The main class to extend is `BaseClass.ts`.   
 
-HTML page:  
+You yourself define the view classes or view elements you need for your project. You can use the `BaseElements.ts` class as a template to learn from.
+
+You extend the class and then include a reference to the JavaScript in your HTML page.  
+ 
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -410,7 +414,7 @@ But if there is still some functionality missing
 
 In that case create a sub class with the missing features and then have your main class extend that. Use it in your projects. If you believe it is a good fit for adding to the base class then do a pull request at the github page. 
 
-```
+```javascript
 // create an intermediary class that extends BaseClass with your custom methods
 class BaseClass2 extends BaseClass {
     myFunction() {}
@@ -549,18 +553,21 @@ Startup Options
 
 The startup options allows you to configure what options are enabled when creating your class. 
 
-```
+```javascript
 export type StartOptions =  {
    startWith?: string, /* a method to call after the class is created. note: start is always called first. default null */
    addStyles: boolean, /* adds the basic styles needed for some functionality. default true */ 
    bindProperties: boolean /* binds the class members to the class for the this keyword. default true*/
 }
 
-BaseClass.startWhenRead(MyClass, {addStyles: true});
+BaseClass.startWhenReady(MyClass, {addStyles: true});
 ```
 
+If you need to start manually, on an event other than on the page `DOMContentLoaded` then you can call the static method `BaseClass.start(MyClass)`. 
+
+
 ---
-Errors  
+#Errors  
 
 Property 'start' in type 'MyClass' is not assignable to the same property in base type 'BaseClass'.
   Type '() => void' is not assignable to type '() => Promise<void>'.
@@ -568,7 +575,7 @@ Property 'start' in type 'MyClass' is not assignable to the same property in bas
 
 Make sure the methods you override match the signiture of the method you are overriding. In the error above instead of using: 
 
-```
+```javascript
 // incorrect 
 start(): void {
 
