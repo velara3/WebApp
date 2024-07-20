@@ -549,7 +549,7 @@ The BaseClass also uses the following naming for the CSS classes, dialog and the
    defaultCSS: string = ... // default css. in sub classes append your own rather than overwrite 
 ```
 ---
-Startup Options  
+#Startup Options  
 
 The startup options allows you to configure what options are enabled when creating your class. 
 
@@ -565,6 +565,76 @@ BaseClass.startWhenReady(MyClass, {addStyles: true});
 
 If you need to start manually, on an event other than on the page `DOMContentLoaded` then you can call the static method `BaseClass.start(MyClass)`. 
 
+---
+#Getting Started
+
+- Open vscode
+- create a folder for your project
+- create an HTML file (use the example HTML above)
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <script src="MyApp.js" type="module"></script>
+</head>
+<body>
+    <h1 id="header">Hello World</h1>
+</body>
+
+</html>
+```
+- create a typescript file (example MyApp.ts)
+- install npm
+- open a console / terminal window in vscode
+- enter `npm install base-class-ts@latest`
+- enter `tsc init` 
+- enter the following code: 
+```json
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "Preserve",
+      "inlineSourceMap": true,
+      "esModuleInterop": true, 
+      "forceConsistentCasingInFileNames": true, 
+  
+      /* Type Checking */
+      "strict": true,
+      "noImplicitOverride": true,
+      "allowUnreachableCode": true,
+      "skipLibCheck": true
+    }
+}
+```
+- in MyApp.ts put the following code:  
+```typescript
+import { BaseClass } from "base-class-ts"
+
+export class MyClass extends BaseClass {
+
+    constructor() {
+        super();
+    }
+
+    // place your code here
+    override async start() {
+        console.log("Hello world");
+        console.log("Start method");
+    }
+}
+```
+- install bun
+- create a bun.build.js file (see bun section)
+- in a console / terminal enter `bun bun.build.js`
+- install Live Server (or your favorite server)
+- launch the server
+- view the HTML page with the server
+- open Web Dev tools 
+- inspect the source tab and check the source and source maps work
+- make issues on github issues page (https://github.com/velara3/WebApp) for any bugs, features or feedback  
 
 ---
 #Errors  
