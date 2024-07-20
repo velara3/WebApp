@@ -46,14 +46,16 @@ It adds a basic object oriented framework to start from.
 - Add a call to create the class using `BaseClass.start()` or `BaseClass.startWhenReady()`
 - Your class starts and code in the `start()` method is run 
 
-It all starts when you run `BaseClass.startWhenReady(MyClass)` or `BaseClass.start(MyClass)` to start the class / application
+The Getting Started section will give you step by step instructions. 
+
+Basically, your class or your application starts when you call `BaseClass.startWhenReady(MyClass)` or `BaseClass.start(MyClass)`.
 
 The main class to extend is `BaseClass.ts`.   
 
 You yourself define the view classes or view elements you need for your project. You can use the `BaseElements.ts` class as a template to learn from.
 
-You extend the class and then include a reference to the JavaScript in your HTML page.  
- 
+You extend the class and include a reference to the JavaScript in your HTML page.  
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +75,7 @@ You extend the class and then include a reference to the JavaScript in your HTML
 ```
 Make sure to set the type to `module`. 
 
-Also, you may have to include the view class if you aren't using a bundler. 
+Also, you may have to include and declare any external view classes before the main class if you aren't using a bundler. 
 ```html
 
 <head>
@@ -85,7 +87,7 @@ Also, you may have to include the view class if you aren't using a bundler.
 </head>
 ```
 
-You can avoid using a bundler if your classes are all local and if you extend BaseClass.js and include it in your project output. But it is much better to use a bundler. 
+You can avoid using a bundler if your classes are all local and if you specifically extend BaseClass.js and include it or the npm project folder in your project output. But it is much better to use a bundler. Bundler instructions are described in a separate section. 
 
 If there are any issues with referencing HTML elements in your view you may need to add `defer` to the script tag. Or move the script tag after the body or into the head section. 
 
@@ -541,7 +543,7 @@ If you need to start manually, on an event other than on the page `DOMContentLoa
 ```typescript
 import { BaseClass } from "base-class-ts"
 
-export class MyClass extends BaseClass {
+export class MyApp extends BaseClass {
 
     constructor() {
         super();
@@ -553,6 +555,8 @@ export class MyClass extends BaseClass {
         console.log("Start method");
     }
 }
+
+BaseClass.startWhenReady(MyApp);
 ```
 - install bun
 - create a bun.build.js file (see bun section)
