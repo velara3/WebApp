@@ -285,27 +285,22 @@ export class BaseClass {
     * @param value text to show in dialog
     * @param callback Callback after user clicks ok or exits from dialog
     */
-   showDialog(title: string, value: string, callback: any = null) {
+   showDialog(title: string, value: string, callback: any = null, dialog?: HTMLDialogElement) {
+      
+      var specifiedDialog = dialog || this.dialog;
 
-      if (this.dialog) {
+      if (specifiedDialog) {
          this.setContent(this.dialogTitle, title);
          this.setContent(this.dialogMessage, value);
-         this.addClass(this.dialog, "display");
-         this.addClass(this.dialog, "center");
-         this.dialog.showModal();
+         this.addClass(specifiedDialog, "display");
+         this.addClass(specifiedDialog, "center");
+         specifiedDialog.showModal();
          this.dialogCallback = callback;
       }
    }
 
    closeAllDialogs() {
-
-   }
-
-   /**
-    * Close dialog event handler
-    */
-   closeDialogClickHandler() {
-      this.closeDialog();
+      this.log("Not implemented")
    }
 
    /**

@@ -28,6 +28,7 @@ It supports:
 - updating the url fragment history
 - showing an network icon when requests are made
 - uses one line fetch calls
+- waiting in async calls
 
 It adds a basic object oriented framework to start from. 
 
@@ -50,17 +51,47 @@ HTML page:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World</title>
+    <script src="my-app.js" type="module"></script>
 </head>
 
 <body>
     <h1 id="header">Hello World</h1>
 </body>
 
-<script type="module" src="index.js">
-</script>
-
 </html>
 ```
+Make sure to set the type to `module`. 
+
+Also, you may have to include the view class if you aren't using a bundler. 
+
+```html
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <script src="view-elements.js" type="module"></script>
+    <script src="my-app.js" type="module"></script>
+</head>
+```
+
+If there are any issues with referencing HTML elements in your view you may need to add `defer` to the script tag. Or move the script tag after the body or into the head section. 
+```
+
+```html
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <script src="view-elements.js" type="module"></script>
+    <script src="my-app.js" type="module"></script>
+</head>
+```
+If your HTML page does not have the elements mentioned in your view you will get errors on the page. Open web developer tools and look for errors. 
+
+---
+
 
 Basic Example: 
 ```javascript
@@ -304,6 +335,7 @@ export class CreateElements extends ViewElements {
 
 ---
 Making Requests  
+
 Using fetch and XMLHttpRequests can be a high learning curve. In this class you can use one line to get or post data to the server using the `requestURL()` method or one of it's wrapper methods like, `getURL` and `postURL`. 
 
 In the past you used XML HTTP Requests like so:  
@@ -363,6 +395,7 @@ Note: It is recommended to wrap all requests calls in a `try catch` block, or ha
 
 ---
 Examples  
+
 The`LoginApp.ts` and the `ExampleApp.ts` file shows a more advanced example of how to use this class in your web projects. These examples do not have HTML pages but are designed to work with HTML pages. 
 
 More Examples:
@@ -373,6 +406,26 @@ More Examples:
 - ExtendedView.ts - example of declaring a view that extends another view
 
 ---
+But if there is still some functionality missing
+
+In that case create a sub class with the missing features and then have your main class extend that. Use it in your projects. If you believe it is a good fit for adding to the base class then do a pull request at the github page. 
+
+```
+// create an intermediary class that extends BaseClass with your custom methods
+class BaseClass2 extends BaseClass {
+    myFunction() {}
+    myFunction2() {}
+}
+
+// extend the intermediary class
+class MainClass extends BaseClass2 {
+
+}
+```
+
+---
+Bundling your modules / pages  
+
 You can use Bun to bundle your typescript classes into the same file
 - Install bun (https://bun.sh/docs/installation)
 - open a folder or project in vscode
@@ -435,6 +488,7 @@ If you can't get it figured out you can simply copy and paste BaseClass.ts into 
 
 ---
 Setting up Build Tasks
+
 VSCode can run commands on build (command + shift + b). The following task will run `bun bun.build.js` when you build your project. In the `.vscode` directory in the root of the project create a file named `tasks.json`. If the `.vscode` directory doesn't exist you can create it. 
 
 Enter commands in your vscode `tasks.json`;  
@@ -454,9 +508,9 @@ Enter commands in your vscode `tasks.json`;
 	]
 }
 ```
-
+---
 CSS:  
-There are a few CSS classes that this workflow relies on. They are added by default. You can exclude them by setting the startup options. 
+There are a few CSS classes that this workflow relies on. They are added by default. You can exclude them by setting the startup option `addStyles` to `false`. 
 
 ```CSS
 .display {
@@ -490,34 +544,38 @@ The BaseClass also uses the following naming for the CSS classes, dialog and the
    versionLabelSelector: string = "#versionLabel";
    defaultCSS: string = ... // default css. in sub classes append your own rather than overwrite 
 ```
-The startup options type allows you to configure what options are enabled when creating your class. 
+---
+Startup Options  
+
+The startup options allows you to configure what options are enabled when creating your class. 
 
 ```
 export type StartOptions =  {
-   startWith?: string, /* a method to call after the class is created */
-   addStyles: boolean, /* adds the basic styles needed for some functionality */ 
-   bindProperties: boolean /* binds the class members to the class for the this keyword */
+   startWith?: string, /* a method to call after the class is created. note: start is always called first. default null */
+   addStyles: boolean, /* adds the basic styles needed for some functionality. default true */ 
+   bindProperties: boolean /* binds the class members to the class for the this keyword. default true*/
 }
 
 BaseClass.startWhenRead(MyClass, {addStyles: true});
 ```
 
 ---
-
 Errors  
 
-Property 'contentLoaded' in type 'AddItemClass' is not assignable to the same property in base type 'BaseClass'.
+Property 'start' in type 'MyClass' is not assignable to the same property in base type 'BaseClass'.
   Type '() => void' is not assignable to type '() => Promise<void>'.
     Type 'void' is not assignable to type 'Promise<void>'.
 
 Make sure the methods you override match the signiture of the method you are overriding. In the error above instead of using: 
 
 ```
-content(): void {
+// incorrect 
+start(): void {
 
 }
-// use
-override async contentLoaded() {
+
+// correct
+override async start() {
 
 }
 ```
