@@ -25,6 +25,8 @@ export declare class BaseClass {
      * @returns instance of your class
      */
     static start(ClassReference: any, options?: StartOptions): any;
+    static instances: Array<BaseClass>;
+    static instancesMap: Map<string, BaseClass>;
     /**
      * Override and call this method for startup
      */
@@ -141,12 +143,8 @@ export declare class BaseClass {
      * @param value text to show in dialog
      * @param callback Callback after user clicks ok or exits from dialog
      */
-    showDialog(title: string, value: string, callback?: any): void;
+    showDialog(title: string, value: string, callback?: any, dialog?: HTMLDialogElement): void;
     closeAllDialogs(): void;
-    /**
-     * Close dialog event handler
-     */
-    closeDialogClickHandler(): void;
     /**
      * Closs dialog if dialog is open. Calls dialog callback if defined
      */
@@ -293,4 +291,5 @@ export type StartOptions = {
     startWith?: string;
     addStyles: boolean;
     bindProperties: boolean;
+    storeReference: boolean;
 };
