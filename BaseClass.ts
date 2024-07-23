@@ -1,18 +1,18 @@
 export class BaseClass {
    showClass: string = "display";
    hideClass: string = "noDisplay";
+   centerClass: string = "center";
    requestIconSelector: string = "#requestIcon";
    dialogSelector: string = "#dialog";
    dialogTitleSelector: string = "#dialogTitle";
    dialogMessageSelector: string = "#dialogMessage";
+   dialogCloseButtonSelector: string = "#dialogCloseButton";
    versionLabelSelector: string = "#versionLabel";
+   dialogCallbacks: WeakMap<HTMLDialogElement, Function> = new WeakMap();
    controllers: Map<number, AbortController> = new Map();
    requestIcon: HTMLElement = document.querySelector(this.requestIconSelector) as HTMLElement;
    dialog: HTMLDialogElement = document.querySelector(this.dialogSelector) as HTMLDialogElement;
-   dialogTitle: HTMLElement = document.querySelector(this.dialogTitleSelector) as HTMLElement;
-   dialogMessage: HTMLElement = document.querySelector(this.dialogMessageSelector) as HTMLElement;
-   versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
-   dialogCallback?: Function;
+   versionLabel: HTMLElement = this.dialog?.querySelector(this.versionLabelSelector) as HTMLElement;
    requestsInProgress: number = 0;
    localClassReference: any | undefined;
    static PAGE_LOADED: string = "DOMContentLoaded";
@@ -78,6 +78,9 @@ export class BaseClass {
       if (options?.bindProperties) {
          this.bindProperties(this.localClassReference);
       }
+
+      this.bindViewElements();
+      this.setupEventListeners();
 
       if (options?.addStyles) {
          this.addDefaultStyles();
@@ -243,6 +246,15 @@ export class BaseClass {
    }
 
    /**
+    * Get references to view elements here.
+    * You do not need to do this if you use classes or views
+    * Override in sub classes
+    */
+   bindViewElements() {
+
+   }
+
+   /**
     * Handler for receiving a message from an embedded iframe
     * Override in your sub class
     * @param event 
@@ -286,21 +298,23 @@ export class BaseClass {
     * @param callback Callback after user clicks ok or exits from dialog
     */
    showDialog(title: string, value: string, callback: any = null, dialog?: HTMLDialogElement) {
-      
       var specifiedDialog = dialog || this.dialog;
 
       if (specifiedDialog) {
-         this.setContent(this.dialogTitle, title);
-         this.setContent(this.dialogMessage, value);
-         this.addClass(specifiedDialog, "display");
-         this.addClass(specifiedDialog, "center");
+         var dialogTitle: HTMLElement = specifiedDialog.querySelector(this.dialogTitleSelector) as HTMLElement;
+         var dialogMessage: HTMLElement = specifiedDialog.querySelector(this.dialogMessageSelector) as HTMLElement;
+         var closeButton: HTMLElement = specifiedDialog.querySelector(this.dialogCloseButtonSelector) as HTMLElement;
+         dialogTitle && this.setContent(dialogTitle, title);
+         dialogMessage && this.setContent(dialogMessage, value);
+         this.removeClass(specifiedDialog, this.hideClass);
+         this.addClass(specifiedDialog, this.showClass);
+         this.addClass(specifiedDialog, this.centerClass);
          specifiedDialog.showModal();
-         this.dialogCallback = callback;
+         this.dialogCallbacks.set(specifiedDialog, callback);
+         closeButton && closeButton.addEventListener("click", (event) => {
+            this.closeDialog(specifiedDialog);
+         })
       }
-   }
-
-   closeAllDialogs() {
-      this.log("Not implemented")
    }
 
    /**
@@ -312,11 +326,18 @@ export class BaseClass {
       if (specifiedDialog) {
          this.removeClass(specifiedDialog, "display");
          specifiedDialog.close();
-      }
+      
+         var callback = this.dialogCallbacks.get(specifiedDialog);
+         if (callback) {
+            callback(specifiedDialog);
+         }
 
-      if (this.dialogCallback) {
-         this.dialogCallback(specifiedDialog);
+         this.dialogCallbacks.delete(specifiedDialog);
       }
+   }
+
+   closeAllDialogs() {
+      this.log("Not implemented")
    }
 
    /**
@@ -400,12 +421,22 @@ export class BaseClass {
    }
 
    /**
-    * Hides an element that is displayed at startup
+    * Hides an element that would be displayed at startup
     * @param element element to hide
     */
-   hideElement(element: Element) {
+   hideElement(element: HTMLElement | Array<HTMLElement>,) {
       if (element && "classList" in element) {
          this.addClass(element, this.hideClass);
+      }
+   }
+
+   /**
+    * Shows an element that would not be displayed at startup
+    * @param element element to show
+    */
+   showElement(element: HTMLElement | Array<HTMLElement>) {
+      if (element && "classList" in element) {
+         this.removeClass(element, this.hideClass);
       }
    }
 

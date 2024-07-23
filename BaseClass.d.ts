@@ -1,18 +1,18 @@
 export declare class BaseClass {
     showClass: string;
     hideClass: string;
+    centerClass: string;
     requestIconSelector: string;
     dialogSelector: string;
     dialogTitleSelector: string;
     dialogMessageSelector: string;
+    dialogCloseButtonSelector: string;
     versionLabelSelector: string;
+    dialogCallbacks: WeakMap<HTMLDialogElement, Function>;
     controllers: Map<number, AbortController>;
     requestIcon: HTMLElement;
     dialog: HTMLDialogElement;
-    dialogTitle: HTMLElement;
-    dialogMessage: HTMLElement;
     versionLabel: HTMLElement;
-    dialogCallback?: Function;
     requestsInProgress: number;
     localClassReference: any | undefined;
     static PAGE_LOADED: string;
@@ -118,6 +118,12 @@ export declare class BaseClass {
      */
     setupEventListeners(): void;
     /**
+     * Get references to view elements here.
+     * You do not need to do this if you use classes or views
+     * Override in sub classes
+     */
+    bindViewElements(): void;
+    /**
      * Handler for receiving a message from an embedded iframe
      * Override in your sub class
      * @param event
@@ -144,11 +150,11 @@ export declare class BaseClass {
      * @param callback Callback after user clicks ok or exits from dialog
      */
     showDialog(title: string, value: string, callback?: any, dialog?: HTMLDialogElement): void;
-    closeAllDialogs(): void;
     /**
      * Closs dialog if dialog is open. Calls dialog callback if defined
      */
     closeDialog(dialog?: HTMLDialogElement): void;
+    closeAllDialogs(): void;
     /**
      * Add a class to an element or an array of elements
      * @param element element or elements to add a class to
@@ -173,10 +179,15 @@ export declare class BaseClass {
      */
     revealElement(element: HTMLElement, display?: boolean): void;
     /**
-     * Hides an element that is displayed at startup
+     * Hides an element that would be displayed at startup
      * @param element element to hide
      */
-    hideElement(element: Element): void;
+    hideElement(element: HTMLElement | Array<HTMLElement>): void;
+    /**
+     * Shows an element that would not be displayed at startup
+     * @param element element to show
+     */
+    showElement(element: HTMLElement | Array<HTMLElement>): void;
     /**
      * Gets the version defined at a version endpoint
      * @param text Pretext for version info
