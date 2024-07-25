@@ -15,8 +15,18 @@ export declare class BaseClass {
     versionLabel: HTMLElement;
     requestsInProgress: number;
     localClassReference: any | undefined;
+    static logMessages: string[];
+    static ShowLogs: boolean;
+    static DOM_CONTENT_LOADED: string;
     static PAGE_LOADED: string;
     constructor();
+    /**
+     * Call this method after you declare your class and it will create the class instance on the page content is loaded
+     * Pass in StartupOptions to modify the start up options
+     * Alternatively, call the static start method to create the class immediately
+     * @param ClassReference reference to the sub class that extends this class
+     * @param options optional object with properties of StatupOptions
+     */
     static startWhenReady(ClassReference: any, options?: StartOptions): void;
     /**
      * Static method that creates an instance of your class and then calls the instance start() method
@@ -299,8 +309,8 @@ export declare class BaseClass {
 */
 export declare function getStartOptions(): StartOptions;
 export type StartOptions = {
-    startWith?: string;
-    addStyles: boolean;
-    bindProperties: boolean;
-    storeReference: boolean;
+    startEvent?: string;
+    addStyles?: boolean;
+    bindProperties?: boolean;
+    storeReference?: boolean;
 };

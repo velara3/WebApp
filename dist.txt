@@ -1,0 +1,17 @@
+Building this library
+---
+run tsc to output Javascript
+
+Exporting to Javascript
+---
+Run tsc
+
+
+Publishing to NPM
+---
+tsc
+update version
+push to github
+npm publish
+
+

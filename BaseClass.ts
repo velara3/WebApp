@@ -15,14 +15,27 @@ export class BaseClass {
    versionLabel: HTMLElement = this.dialog?.querySelector(this.versionLabelSelector) as HTMLElement;
    requestsInProgress: number = 0;
    localClassReference: any | undefined;
-   static PAGE_LOADED: string = "DOMContentLoaded";
+
+   static logMessages: string[] = [];
+   static ShowLogs: boolean = true;
+   static DOM_CONTENT_LOADED: string = "DOMContentLoaded";
+   static PAGE_LOADED: string = "load";
 
    constructor() {
 
    }
 
+   /**
+    * Call this method after you declare your class and it will create the class instance on the page content is loaded
+    * Pass in StartupOptions to modify the start up options
+    * Alternatively, call the static start method to create the class immediately
+    * @param ClassReference reference to the sub class that extends this class
+    * @param options optional object with properties of StatupOptions
+    */
    static startWhenReady(ClassReference: any, options?: StartOptions) {
-      window.addEventListener(BaseClass.PAGE_LOADED, (event) => {
+      var startEvent = options?.startEvent ?? BaseClass.DOM_CONTENT_LOADED;
+
+      window.addEventListener(startEvent, (event) => {
          try {
             BaseClass.start(ClassReference, options);
          }
@@ -39,24 +52,29 @@ export class BaseClass {
     * @returns instance of your class
     */
    static start(ClassReference: any, options?: StartOptions) {
-      var instance = new ClassReference();
-      instance.localClassReference = ClassReference;
+      try {
+         var instance = new ClassReference();
+         instance.localClassReference = ClassReference;
 
-      // save reference to our instance
-      if (options?.storeReference) {
-         this.instances.push(instance);
-         this.instancesMap.set(instance.constructor, instance);
+         // save reference to our instance
+         if (options?.storeReference) {
+            this.instances.push(instance);
+            this.instancesMap.set(instance.constructor, instance);
+         }
+         
+         var defaultOptions = getStartOptions();
+         if (options) {
+            Object.assign(defaultOptions, options);
+         }
+
+         instance.applyOptions(defaultOptions);
+         instance.start();
+
+         return instance;
       }
-      
-      var defaultOptions = getStartOptions();
-      if (options) {
-         Object.assign(defaultOptions, options);
+      catch(error) {
+         console.log(error);
       }
-
-      instance.applyOptions(defaultOptions);
-      instance.start();
-
-      return instance;
    }
 
    static instances: Array<BaseClass> = [];
@@ -75,21 +93,21 @@ export class BaseClass {
     */
    applyOptions(options?: StartOptions) {
 
-      if (options?.bindProperties) {
-         this.bindProperties(this.localClassReference);
+      try {
+
+         if (options?.bindProperties) {
+            this.bindProperties(this.localClassReference);
+         }
+   
+         this.bindViewElements();
+         this.setupEventListeners();
+   
+         if (options?.addStyles) {
+            this.addDefaultStyles();
+         }
       }
-
-      this.bindViewElements();
-      this.setupEventListeners();
-
-      if (options?.addStyles) {
-         this.addDefaultStyles();
-      }
-
-      if (options?.startWith) {
-         var value = options.startWith;
-         // @ts-ignore
-         this[value]();
+      catch(error) {
+         console.log(error);
       }
 
    }
@@ -313,6 +331,9 @@ export class BaseClass {
          this.dialogCallbacks.set(specifiedDialog, callback);
          closeButton && closeButton.addEventListener("click", (event) => {
             this.closeDialog(specifiedDialog);
+         })
+         specifiedDialog.addEventListener("close", (event)=> {
+            this.closeDialog(specifiedDialog); 
          })
       }
    }
@@ -786,7 +807,25 @@ export class BaseClass {
    * @param values values to log
    */
    log(...values: any[]) {
-      console.log(...values);
+
+      if (BaseClass.ShowLogs) {
+         
+         var stack = new Error().stack?.split("\n");
+         
+         if (stack) {
+            console.groupCollapsed.apply(console, values);
+            for(var i = 2; i < stack.length; i ++) {
+                console.log('%c' + stack[i].trim().substring(3), 'padding-left: 10px; color: #777');
+            }
+            console.groupEnd();
+         }
+         else {
+            console.log(...values);
+         }
+      }
+      else {
+         BaseClass.logMessages.push(...values)
+      }
    }
 
    displayErrors() {
@@ -840,12 +879,13 @@ export function getStartOptions(): StartOptions {
   return {
    addStyles: true, 
    bindProperties: true,
-   storeReference: true
+   storeReference: true,
+   startEvent: BaseClass.DOM_CONTENT_LOADED
   }
 }
 export type StartOptions =  {
-   startWith?: string, 
-   addStyles: boolean, 
-   bindProperties: boolean,
-   storeReference: boolean
+   startEvent?: string, 
+   addStyles?: boolean, 
+   bindProperties?: boolean,
+   storeReference?: boolean
 }
