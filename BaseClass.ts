@@ -14,12 +14,35 @@ export class BaseClass {
    dialog: HTMLDialogElement = document.querySelector(this.dialogSelector) as HTMLDialogElement;
    versionLabel: HTMLElement = this.dialog?.querySelector(this.versionLabelSelector) as HTMLElement;
    requestsInProgress: number = 0;
+   /**
+    * If this is set then it is the base URL for relative URLs used in fetch calls
+    * 
+    * Example:  
+    * ```js
+      this.baseURI = "api.example.com";
+      if (window.location.hostname=="localhost") {
+         this.baseURI = "localhost:3001";
+      }
+      this.postURL("test"); // results in htto://localhost:3001/test
+      ```
+    *
+    */
+   baseURI: string = "";
+   // determines if a string is a relative or absolute URL
+   isBaseURLRegEx: RegExp = /^http/i;
    localClassReference: any | undefined;
-
+   
    static logMessages: string[] = [];
    static ShowLogs: boolean = true;
    static DOM_CONTENT_LOADED: string = "DOMContentLoaded";
    static PAGE_LOADED: string = "load";
+   static JSON: string = "json";
+   static TEXT: string = "text";
+   static BLOB: string = "blob";
+   static RESPONSE: string = "response";
+
+   defaultPostResultType: string = BaseClass.RESPONSE;
+   defaultGetResultType: string = BaseClass.RESPONSE;
 
    constructor() {
 
@@ -55,16 +78,16 @@ export class BaseClass {
       try {
          var instance = new ClassReference();
          instance.localClassReference = ClassReference;
+         
+         var defaultOptions = getStartOptions();
+         if (options) {
+            Object.assign(defaultOptions, options);
+         }
 
          // save reference to our instance
          if (options?.storeReference) {
             this.instances.push(instance);
             this.instancesMap.set(instance.constructor, instance);
-         }
-         
-         var defaultOptions = getStartOptions();
-         if (options) {
-            Object.assign(defaultOptions, options);
          }
 
          instance.applyOptions(defaultOptions);
@@ -144,7 +167,7 @@ export class BaseClass {
     * @param json returns the results as json. default is true
     * @returns 
     */
-   async getURL(url: string, options: any = null, type: string = "json") {
+   async getURL(url: string, options: any = null, type: string = "response") {
       if (options == null) { options = {} };
       options.method = "get";
       return await this.requestURL(url, options, type);
@@ -162,11 +185,11 @@ export class BaseClass {
     * ```
     * Cancel using cancelRequests()
     * @param url url
-    * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param type type of object to return. default is json object. if null then response object  
+    * @param options options fetch options object. example, {body: formData }
+    * @param type type of object to return. json, text, blob or response. default is a response object  
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
-   async postURL(url: string, form: any, options: any = null, type: string = "json") {
+   async postURL(url: string, form?: any, options: any = null, type: string = "response") {
       if (options == null) { options = {} }
       if (form && options.body == null) { options.body = form }
       options.method = "post";
@@ -199,11 +222,13 @@ export class BaseClass {
     * ```
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param type returns the results as json or the response object if false. default is true
+    * @param type returns the results as json by default. options ara text or response for response
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
    async requestURL(url: string, options: any = null, type: string = "json") {
       var response: any = null;
+      var fetchURL = url;
+      var requestId = this.requestsInProgress++;
 
       try {
          this.showRequestIcon();
@@ -214,10 +239,13 @@ export class BaseClass {
          if (options == null) { options = {} }
          if (options.signal == null) { options.signal = signal };
 
-         var requestId = this.requestsInProgress++;
          this.controllers.set(requestId, controller);
 
-         response = await fetch(url, options);
+         if (this.baseURI && url.match(this.isBaseURLRegEx)==null) {
+            fetchURL = window.location.protocol + "//" + this.addStrings("/", this.baseURI, url);
+         }
+
+         response = await fetch(fetchURL, options);
 
          this.controllers.delete(requestId);
          this.requestsInProgress--;
@@ -239,19 +267,38 @@ export class BaseClass {
 
             return data;
          }
+         else if (type == "blob") {
+            
+            try {
+               var blob = await response.blob();
+            }
+            catch (error) {
+               this.log(error);
+               return error;
+            }
+
+            return blob;
+         }
          else if (type == "text") {
             var text = await response.text();
             return text;
+         }
+         else if (type=="response") {
+            return response;
          }
 
          return response;
       }
       catch (error) {
+         this.controllers.delete(requestId);
          this.requestsInProgress--;
-         if (response && this.controllers && this.controllers.has(this.requestsInProgress + 1)) {
-            this.controllers.delete(this.requestsInProgress + 1);
+
+         if (this.controllers.size == 0) {
+            this.showRequestIcon(false);
          }
+
          return error;
+         // "Failed to fetch" - url not found or server off line
       }
    }
 
@@ -830,6 +877,41 @@ export class BaseClass {
 
    displayErrors() {
       var output = "";
+   }
+
+   /**
+    * Adds strings onto the end of other strings. 
+    * Separator is space by default but can be any character
+    * @param {String} separator 
+    * @param {Array} strings
+    **/
+   addStrings(separator=" ", ...strings: any[]) {
+     var character = "";
+     var value = "";
+     if (separator==null) separator = " ";
+   
+     var numberOfStrings = strings ? strings.length : 0;
+   
+     for (let i = 0; i < numberOfStrings; i++) {
+       var nextString = strings[i];
+   
+       if (nextString!=null) {
+         character = value.charAt(value.length-1);
+   
+         // if separater is alrdady at end of first string just add value
+         if (character==separator) {
+           value += nextString;
+         }
+         else if (value=="") {
+           value += nextString;
+         }
+         else {
+           value += separator + nextString;
+         }
+       }
+     }
+   
+     return value;
    }
    
    addDefaultStyles(overwrite:boolean = false) {

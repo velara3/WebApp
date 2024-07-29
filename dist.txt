@@ -4,13 +4,13 @@ run tsc to output Javascript
 
 Exporting to Javascript
 ---
-Run tsc
+Run tsc (command+shift+b)
 
 
 Publishing to NPM
 ---
-tsc
-update version
+run tsc (command+shift+b)
+update version number in package.json
 push to github
 npm publish
 

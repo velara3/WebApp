@@ -14,11 +14,19 @@ export declare class BaseClass {
     dialog: HTMLDialogElement;
     versionLabel: HTMLElement;
     requestsInProgress: number;
+    baseURI: string;
+    isBaseURLRegEx: RegExp;
     localClassReference: any | undefined;
     static logMessages: string[];
     static ShowLogs: boolean;
     static DOM_CONTENT_LOADED: string;
     static PAGE_LOADED: string;
+    static JSON: string;
+    static TEXT: string;
+    static BLOB: string;
+    static RESPONSE: string;
+    defaultPostResultType: string;
+    defaultGetResultType: string;
     constructor();
     /**
      * Call this method after you declare your class and it will create the class instance on the page content is loaded
@@ -87,11 +95,11 @@ export declare class BaseClass {
      * ```
      * Cancel using cancelRequests()
      * @param url url
-     * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param type type of object to return. default is json object. if null then response object
+     * @param options options fetch options object. example, {body: formData }
+     * @param type type of object to return. json, text, blob or response. default is a response object
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
-    postURL(url: string, form: any, options?: any, type?: string): Promise<any>;
+    postURL(url: string, form?: any, options?: any, type?: string): Promise<any>;
     /**
      * Makes a request to a url.
      * Returns the url as text or json.
@@ -118,7 +126,7 @@ export declare class BaseClass {
      * ```
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param type returns the results as json or the response object if false. default is true
+     * @param type returns the results as json by default. options ara text or response for response
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
     requestURL(url: string, options?: any, type?: string): Promise<any>;
@@ -296,6 +304,13 @@ export declare class BaseClass {
     */
     log(...values: any[]): void;
     displayErrors(): void;
+    /**
+     * Adds strings onto the end of other strings.
+     * Separator is space by default but can be any character
+     * @param {String} separator
+     * @param {Array} strings
+     **/
+    addStrings(separator?: string, ...strings: any[]): string;
     addDefaultStyles(overwrite?: boolean): void;
     /**
      * Default CSS added to the page necessary for some functionality.
