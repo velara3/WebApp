@@ -297,10 +297,21 @@ export class BaseClass {
             this.showRequestIcon(false);
          }
 
+         // "Failed to fetch" - means the url is not found or server off line
+         this.requestError(error, fetchURL);
+
          return error;
-         // "Failed to fetch" - url not found or server off line
       }
    }
+
+   /**
+    * Callback when an error occurs calling requestURL() or fetch
+    * Override in sub classes
+    */
+   requestError(error: Error|unknown, url: string) {
+      return;
+   }
+
 
    /**
     * Attach event listeners here

@@ -15,3 +15,6 @@ push to github
 npm publish
 
 
+Using in your project
+---
+See readme.md

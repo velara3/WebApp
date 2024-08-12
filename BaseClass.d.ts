@@ -14,6 +14,19 @@ export declare class BaseClass {
     dialog: HTMLDialogElement;
     versionLabel: HTMLElement;
     requestsInProgress: number;
+    /**
+     * If this is set then it is the base URL for relative URLs used in fetch calls
+     *
+     * Example:
+     * ```js
+       this.baseURI = "api.example.com";
+       if (window.location.hostname=="localhost") {
+          this.baseURI = "localhost:3001";
+       }
+       this.postURL("test"); // results in htto://localhost:3001/test
+       ```
+     *
+     */
     baseURI: string;
     isBaseURLRegEx: RegExp;
     localClassReference: any | undefined;
@@ -130,6 +143,11 @@ export declare class BaseClass {
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
     requestURL(url: string, options?: any, type?: string): Promise<any>;
+    /**
+     * Callback when an error occurs calling requestURL() or fetch
+     * Override in sub classes
+     */
+    requestError(error: Error | unknown, url: string): void;
     /**
      * Attach event listeners here
      * Override in sub classes
