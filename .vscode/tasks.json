@@ -16,9 +16,9 @@
 		{
             "label": "tsc watch",
             "type": "shell",
-            "command": "./node_modules/.bin/tsc",
+            "command": "tsc",
             "isBackground": true,
-            "args": ["--watch", "--noEmit", "--project", "/"],
+            "args": ["--watch", "--noEmit"],
             "group": {
                 "kind": "build",
                 "isDefault": true
