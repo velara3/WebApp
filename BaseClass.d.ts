@@ -333,6 +333,36 @@ export declare class BaseClass {
      */
     addListItem(list: HTMLElement, item: HTMLElement): void;
     /**
+     * Clear the list of all options
+     * @param {HTMLSelectElement|HTMLElement} list
+     **/
+    clearListOptions(list: HTMLSelectElement | HTMLElement): void;
+    /**
+     * Find an existing option in a list of options.
+     * Pass in an value to find and a property and an additional property if it's an object
+     * @param {Array} options
+     * @param {*} value
+     * @param {String} property property on the existing option - looks like this may always be "value"?
+     * @param {String} property2 additional property on the existing option
+     **/
+    getListOption(options: [], value: any, property?: string | any, property2?: string | any): null;
+    /**
+     * Select a list item
+     * ```js
+     * // Example if option value is an object
+     * selectListOption(myList, null, findValue, "option_value", "object_property_name");
+     * // example finding object with name as apple
+     * mylist.value = {name: "apple"}
+     * selectListOption(myList, null, "apple", "value", "name");
+     * // example finding existing object
+     * var option = {name: "apple"}
+     * mylist.appendChild(option);
+     * selectListOption(myList, option);
+     * ```
+     * @param {HTMLSelectElement} list
+     **/
+    selectListOption(list: HTMLElement | any, option: any, value?: any, property?: string | any, property2?: string | any): void;
+    /**
     * Log values to the console
     * @param values values to log
     */

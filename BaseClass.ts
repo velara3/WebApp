@@ -31,7 +31,7 @@ export class BaseClass {
    // determines if a string is a relative or absolute URL
    isBaseURLRegEx: RegExp = /^http/i;
    localClassReference: any | undefined;
-   
+
    static logMessages: string[] = [];
    static ShowLogs: boolean = true;
    static DOM_CONTENT_LOADED: string = "DOMContentLoaded";
@@ -78,7 +78,7 @@ export class BaseClass {
       try {
          var instance = new ClassReference();
          instance.localClassReference = ClassReference;
-         
+
          var defaultOptions = getStartOptions();
          if (options) {
             Object.assign(defaultOptions, options);
@@ -95,7 +95,7 @@ export class BaseClass {
 
          return instance;
       }
-      catch(error) {
+      catch (error) {
          console.log(error);
       }
    }
@@ -121,15 +121,15 @@ export class BaseClass {
          if (options?.bindProperties) {
             this.bindProperties(this.localClassReference);
          }
-   
+
          this.bindViewElements();
          this.setupEventListeners();
-   
+
          if (options?.addStyles) {
             this.addDefaultStyles();
          }
       }
-      catch(error) {
+      catch (error) {
          console.log(error);
       }
 
@@ -241,7 +241,7 @@ export class BaseClass {
 
          this.controllers.set(requestId, controller);
 
-         if (this.baseURI && url.match(this.isBaseURLRegEx)==null) {
+         if (this.baseURI && url.match(this.isBaseURLRegEx) == null) {
             fetchURL = window.location.protocol + "//" + this.addStrings("/", this.baseURI, url);
          }
 
@@ -268,7 +268,7 @@ export class BaseClass {
             return data;
          }
          else if (type == "blob") {
-            
+
             try {
                var blob = await response.blob();
             }
@@ -283,7 +283,7 @@ export class BaseClass {
             var text = await response.text();
             return text;
          }
-         else if (type=="response") {
+         else if (type == "response") {
             return response;
          }
 
@@ -308,7 +308,7 @@ export class BaseClass {
     * Callback when an error occurs calling requestURL() or fetch
     * Override in sub classes
     */
-   requestError(error: Error|unknown, url: string) {
+   requestError(error: Error | unknown, url: string) {
       return;
    }
 
@@ -390,8 +390,8 @@ export class BaseClass {
          closeButton && closeButton.addEventListener("click", (event) => {
             this.closeDialog(specifiedDialog);
          })
-         specifiedDialog.addEventListener("close", (event)=> {
-            this.closeDialog(specifiedDialog); 
+         specifiedDialog.addEventListener("close", (event) => {
+            this.closeDialog(specifiedDialog);
          })
       }
    }
@@ -405,7 +405,7 @@ export class BaseClass {
       if (specifiedDialog) {
          this.removeClass(specifiedDialog, "display");
          specifiedDialog.close();
-      
+
          var callback = this.dialogCallbacks.get(specifiedDialog);
          if (callback) {
             callback(specifiedDialog);
@@ -703,7 +703,7 @@ export class BaseClass {
       searchParameters.set(parameter, value);
       var pathQuery = window.location.pathname + "?" + searchParameters.toString();
       var hashFragments = url.hash;
-      if (hashFragments!="#") {
+      if (hashFragments != "#") {
          pathQuery += hashFragments;
       }
       history.pushState(null, "", pathQuery);
@@ -879,8 +879,86 @@ export class BaseClass {
     * @param list List item LI or Select element
     * @param item item to add to the list
     */
-   addListItem(list:HTMLElement, item:HTMLElement) {
+   addListItem(list: HTMLElement, item: HTMLElement) {
       list.appendChild(item);
+   }
+
+   /**
+    * Clear the list of all options
+    * @param {HTMLSelectElement|HTMLElement} list 
+    **/
+   clearListOptions(list: HTMLSelectElement | HTMLElement) {
+      list.innerHTML = "";
+      "value" in list ? list.value = "" : 0;
+   }
+
+   /**
+    * Find an existing option in a list of options. 
+    * Pass in an value to find and a property and an additional property if it's an object
+    * @param {Array} options 
+    * @param {*} value 
+    * @param {String} property property on the existing option - looks like this may always be "value"?
+    * @param {String} property2 additional property on the existing option
+    **/
+   getListOption(options: [], value: any, property: string | any = null, property2: string | any = null) {
+
+      for (var i = 0; i < options.length; i++) {
+         let option = options[i];
+
+         if (property2) {
+            if (option[property][property2] == value) {
+               return option;
+            }
+         }
+         else if (property) {
+            if (option[property] == value) {
+               return option;
+            }
+         }
+         else if (option == value) {
+            return option;
+         }
+      }
+
+      return null;
+   }
+
+   /**
+    * Select a list item
+    * ```js
+    * // Example if option value is an object 
+    * selectListOption(myList, null, findValue, "option_value", "object_property_name");
+    * // example finding object with name as apple
+    * mylist.value = {name: "apple"}
+    * selectListOption(myList, null, "apple", "value", "name");
+    * // example finding existing object
+    * var option = {name: "apple"}
+    * mylist.appendChild(option);
+    * selectListOption(myList, option);
+    * ```
+    * @param {HTMLSelectElement} list 
+    **/
+   selectListOption(list: HTMLElement | any, option: any, value: any = null, property: string | any = null, property2: string | any = null) {
+
+      if (property2) {
+         option = this.getListOption(list.options, value, property, property2);
+         if (option) {
+            list.value = option.value;
+         }
+      }
+      else if (property) {
+         option = this.getListOption(list.options, value, property);
+         if (option) {
+            list.value = option.value;
+         }
+      }
+      else if (option) {
+         list.value = option.value;
+      }
+      else {
+         list.value = value;
+      }
+
    }
 
    /**
@@ -890,13 +968,13 @@ export class BaseClass {
    log(...values: any[]) {
 
       if (BaseClass.ShowLogs) {
-         
+
          var stack = new Error().stack?.split("\n");
-         
+
          if (stack) {
             console.groupCollapsed.apply(console, values);
-            for(var i = 2; i < stack.length; i ++) {
-                console.log('%c' + stack[i].trim().substring(3), 'padding-left: 10px; color: #777');
+            for (var i = 2; i < stack.length; i++) {
+               console.log('%c' + stack[i].trim().substring(3), 'padding-left: 10px; color: #777');
             }
             console.groupEnd();
          }
@@ -919,41 +997,41 @@ export class BaseClass {
     * @param {String} separator 
     * @param {Array} strings
     **/
-   addStrings(separator=" ", ...strings: any[]) {
-     var character = "";
-     var value = "";
-     if (separator==null) separator = " ";
-   
-     var numberOfStrings = strings ? strings.length : 0;
-   
-     for (let i = 0; i < numberOfStrings; i++) {
-       var nextString = strings[i];
-   
-       if (nextString!=null) {
-         character = value.charAt(value.length-1);
-   
-         // if separater is alrdady at end of first string just add value
-         if (character==separator) {
-           value += nextString;
+   addStrings(separator = " ", ...strings: any[]) {
+      var character = "";
+      var value = "";
+      if (separator == null) separator = " ";
+
+      var numberOfStrings = strings ? strings.length : 0;
+
+      for (let i = 0; i < numberOfStrings; i++) {
+         var nextString = strings[i];
+
+         if (nextString != null) {
+            character = value.charAt(value.length - 1);
+
+            // if separater is alrdady at end of first string just add value
+            if (character == separator) {
+               value += nextString;
+            }
+            else if (value == "") {
+               value += nextString;
+            }
+            else {
+               value += separator + nextString;
+            }
          }
-         else if (value=="") {
-           value += nextString;
-         }
-         else {
-           value += separator + nextString;
-         }
-       }
-     }
-   
-     return value;
+      }
+
+      return value;
    }
-   
-   addDefaultStyles(overwrite:boolean = false) {
+
+   addDefaultStyles(overwrite: boolean = false) {
       var defaultStylesheetId = this.localClassReference?.name + "DefaultStylesheet";
       var stylesheetExists = document.getElementById(defaultStylesheetId);
-      
+
       // check to prevent adding multiple times
-      if (overwrite || stylesheetExists==null) {
+      if (overwrite || stylesheetExists == null) {
          var defaultStyles = document.createElement("style");
          defaultStyles.setAttribute("id", defaultStylesheetId);
          defaultStyles.innerHTML = this.defaultCSS;
@@ -965,8 +1043,8 @@ export class BaseClass {
     * Default CSS added to the page necessary for some functionality. 
     * You can add to this string in your sub class
     */
-   defaultCSS = 
-   `.display {
+   defaultCSS =
+      `.display {
        display: block !important;
    }
    .noDisplay {
@@ -992,16 +1070,16 @@ export class BaseClass {
 */
 export function getStartOptions(): StartOptions {
 
-  return {
-   addStyles: true, 
-   bindProperties: true,
-   storeReference: true,
-   startEvent: BaseClass.DOM_CONTENT_LOADED
-  }
+   return {
+      addStyles: true,
+      bindProperties: true,
+      storeReference: true,
+      startEvent: BaseClass.DOM_CONTENT_LOADED
+   }
 }
-export type StartOptions =  {
-   startEvent?: string, 
-   addStyles?: boolean, 
+export type StartOptions = {
+   startEvent?: string,
+   addStyles?: boolean,
    bindProperties?: boolean,
    storeReference?: boolean
 }
