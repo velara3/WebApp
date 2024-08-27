@@ -900,7 +900,7 @@ export class BaseClass {
     * @param {String} property property on the existing option - looks like this may always be "value"?
     * @param {String} property2 additional property on the existing option
     **/
-   getListOption(options: [], value: any, property: string | any = null, property2: string | any = null) {
+   getListOption(options: any[], value: any, property: string | any = null, property2: string | any = null) {
 
       for (var i = 0; i < options.length; i++) {
          let option = options[i];

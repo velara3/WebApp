@@ -345,7 +345,7 @@ export declare class BaseClass {
      * @param {String} property property on the existing option - looks like this may always be "value"?
      * @param {String} property2 additional property on the existing option
      **/
-    getListOption(options: [], value: any, property?: string | any, property2?: string | any): null;
+    getListOption(options: any[], value: any, property?: string | any, property2?: string | any): any;
     /**
      * Select a list item
      * ```js
