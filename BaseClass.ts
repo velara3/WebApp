@@ -693,7 +693,7 @@ export class BaseClass {
    }
 
    /**
-    * Set the url query of the current page 
+    * Updates a parameter value in the url query of the current page 
     * @param parameter name of parameter
     * @param value value to set parameter to
     */
@@ -702,6 +702,10 @@ export class BaseClass {
       var searchParameters = url.searchParams;
       searchParameters.set(parameter, value);
       var pathQuery = window.location.pathname + "?" + searchParameters.toString();
+      var hashFragments = url.hash;
+      if (hashFragments!="#") {
+         pathQuery += hashFragments;
+      }
       history.pushState(null, "", pathQuery);
    }
 
@@ -832,6 +836,16 @@ export class BaseClass {
       }
    }
 
+   /**
+    * Creates a select option or list item and returns it
+    * @param label Label of option
+    * @param value Value of option
+    * @param useListItem use list item LI type or OPTION type
+    * @param icon path to icon
+    * @param classes class to add to the option
+    * @param callback call back to run before returning the option
+    * @returns returns a list item LI or an Option element
+    */
    createOption(label: string, value: string, useListItem = false, icon = null, classes = [], callback?: any) {
       var optionName = useListItem ? "li" : "option";
       var option = document.createElement(optionName) as HTMLOptionElement;
@@ -858,6 +872,15 @@ export class BaseClass {
       }
 
       return option;
+   }
+
+   /**
+    * Adds a list item or option element to a List or Select
+    * @param list List item LI or Select element
+    * @param item item to add to the list
+    */
+   addListItem(list:HTMLElement, item:HTMLElement) {
+      list.appendChild(item);
    }
 
    /**
