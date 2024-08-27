@@ -347,6 +347,12 @@ export declare class BaseClass {
      **/
     getListOption(options: any[], value: any, property?: string | any, property2?: string | any): any;
     /**
+     * Get the selected list item. If class name is passed in gets the item with the class name.
+     * @param {HTMLSelectElement} list
+     * @param {string} classname name of class that represents selected item
+     **/
+    getSelectedListItem(list: HTMLElement | any, classname?: string): any;
+    /**
      * Select a list item
      * ```js
      * // Example if option value is an object

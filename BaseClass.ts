@@ -924,7 +924,7 @@ export class BaseClass {
    }
 
    /**
-    * Get selected list item. If class name is passed in gets the item with the class name.
+    * Get the selected list item. If class name is passed in gets the item with the class name.
     * @param {HTMLSelectElement} list 
     * @param {string} classname name of class that represents selected item
     **/
@@ -942,7 +942,7 @@ export class BaseClass {
             }
          }
       }
-      
+
       return list.value;
    }
 
