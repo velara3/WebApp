@@ -924,6 +924,29 @@ export class BaseClass {
    }
 
    /**
+    * Get selected list item. If class name is passed in gets the item with the class name.
+    * @param {HTMLSelectElement} list 
+    * @param {string} classname name of class that represents selected item
+    **/
+   getSelectedListItem(list:HTMLElement|any, classname:string = "") {
+
+      if (classname) {
+         var options = list.options || list.children;
+
+         for (var i = 0; i < options.length; i++) {
+            let option = options[i];
+            var containsClass = option.classList.contains(classname);
+
+            if (containsClass) {
+               return option.value;
+            }
+         }
+      }
+      
+      return list.value;
+   }
+
+   /**
     * Select a list item
     * ```js
     * // Example if option value is an object 

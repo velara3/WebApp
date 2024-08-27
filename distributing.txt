@@ -2,6 +2,7 @@ Building this library
 ---
 run tsc to output Javascript
 
+
 Exporting to Javascript
 ---
 Run tsc (command+shift+b)
@@ -18,6 +19,7 @@ npm publish
 Using in your project
 ---
 See readme.md
+
 
 Installing in your project
 ---
