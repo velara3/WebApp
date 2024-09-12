@@ -27,7 +27,7 @@ export class BaseClass {
       ```
     *
     */
-   baseURI: string = "";
+   baseURI: string|URL = "";
    // determines if a string is a relative or absolute URL
    isBaseURLRegEx: RegExp = /^http/i;
    localClassReference: any | undefined;
@@ -241,7 +241,10 @@ export class BaseClass {
 
          this.controllers.set(requestId, controller);
 
-         if (this.baseURI && url.match(this.isBaseURLRegEx) == null) {
+         if (this.baseURI instanceof URL) {
+            fetchURL = this.baseURI.toString();
+         }
+         else if (this.baseURI && url.match(this.isBaseURLRegEx) == null) {
             fetchURL = window.location.protocol + "//" + this.addStrings("/", this.baseURI, url);
          }
 

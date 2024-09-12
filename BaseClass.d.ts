@@ -27,7 +27,7 @@ export declare class BaseClass {
        ```
      *
      */
-    baseURI: string;
+    baseURI: string | URL;
     isBaseURLRegEx: RegExp;
     localClassReference: any | undefined;
     static logMessages: string[];
