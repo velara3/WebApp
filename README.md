@@ -365,11 +365,45 @@ this.request.send(formData);
 
 With fetch and this class you can make the same calls in one line or a few lines with try catch. 
 ```js
-try {
-    var data = await this.getURL("/data");
+async function getRequest() {
+    try {
+        var response = await this.getURL("/data");
+        var data = await response?.json();
+    }
+    catch(error) {
+        this.log("Error", error);
+    }
 }
-catch(error) {
-    this.log("Error", error);
+async function getRequest() {
+    try {
+        var data = await this.getURL("/data", null, BaseClass.JSON);
+    }
+    catch(error) {
+        this.log("Error", error);
+    }
+}
+
+async function postRequest() {
+    try {
+        var formData = new FormData();
+        formData.append('name', "value");
+        var response = await this.postURL("/data", formData);
+        var data = await response?.json();
+    }
+    catch(error) {
+        this.log("Error", error);
+    }
+}
+
+async function postRequest() {
+    try {
+        var formData = new FormData();
+        formData.append('name', "value");
+        var data = await this.postURL("/data", formData, BaseClass.JSON);
+    }
+    catch(error) {
+        this.log("Error", error);
+    }
 }
 ```
 These methods include get, post, upload and download using asynchronous syntax. The methods `getUrl` and `postURL` both extend `requestURL`. These methods are cancelable and they automatically show the request icon if it is defined while calls are being made. The results is a JSON object or another type or response can be returned. 

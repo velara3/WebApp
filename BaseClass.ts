@@ -164,13 +164,13 @@ export class BaseClass {
     * ```
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param json returns the results as json. default is true
+    * @param returnType type of object to return. json, text, blob or response. default is a response object  
     * @returns 
     */
-   async getURL(url: string, options: any = null, type: string = "response") {
+   async getURL(url: string, options: any = null, returnType: string = "response") {
       if (options == null) { options = {} };
       options.method = "get";
-      return await this.requestURL(url, options, type);
+      return await this.requestURL(url, options, returnType);
    }
 
    /**
@@ -186,14 +186,14 @@ export class BaseClass {
     * Cancel using cancelRequests()
     * @param url url
     * @param options options fetch options object. example, {body: formData }
-    * @param type type of object to return. json, text, blob or response. default is a response object  
+    * @param returnType type of object to return. json, text, blob or response. default is a response object  
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
-   async postURL(url: string, form?: any, options: any = null, type: string = "response") {
+   async postURL(url: string, form?: any, options: any = null, returnType: string = "response") {
       if (options == null) { options = {} }
       if (form && options.body == null) { options.body = form }
       options.method = "post";
-      return await this.requestURL(url, options, type);
+      return await this.requestURL(url, options, returnType);
    }
 
    /**
@@ -222,10 +222,10 @@ export class BaseClass {
     * ```
     * @param url url
     * @param options options fetch options object. example, {method: "post", body: formData }
-    * @param type returns the results as json by default. options ara text or response for response
+    * @param returnType returns the results as json by default. options ara text or response for response
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
-   async requestURL(url: string, options: any = null, type: string = "json") {
+   async requestURL(url: string, options: any = null, returnType: string = "json") {
       var response: any = null;
       var fetchURL = url;
       var requestId = this.requestsInProgress++;
@@ -254,7 +254,7 @@ export class BaseClass {
             this.showRequestIcon(false);
          }
 
-         if (type == "json") {
+         if (returnType == "json") {
             var text = await response.text();
 
             try {
@@ -267,7 +267,7 @@ export class BaseClass {
 
             return data;
          }
-         else if (type == "blob") {
+         else if (returnType == "blob") {
 
             try {
                var blob = await response.blob();
@@ -279,11 +279,11 @@ export class BaseClass {
 
             return blob;
          }
-         else if (type == "text") {
+         else if (returnType == "text") {
             var text = await response.text();
             return text;
          }
-         else if (type == "response") {
+         else if (returnType == "response") {
             return response;
          }
 
@@ -298,17 +298,20 @@ export class BaseClass {
          }
 
          // "Failed to fetch" - means the url is not found or server off line
-         this.requestError(error, fetchURL);
-
+         var alternativeResult = this.requestError(error, fetchURL, options, url);
+         if (alternativeResult!==undefined) {
+            return alternativeResult;
+         }
          return error;
       }
    }
 
    /**
-    * Callback when an error occurs calling requestURL() or fetch
+    * Callback when an error occurs calling getURL(), postURL() or requestURL() 
     * Override in sub classes
+    * Return an alternative value 
     */
-   requestError(error: Error | unknown, url: string) {
+   requestError(error: Error | unknown, fetchUrl: string, options?: any, url?: string) {
       return;
    }
 
@@ -351,6 +354,9 @@ export class BaseClass {
       if (this.controllers) {
          this.controllers.forEach((value: AbortController, key: number, map: Map<number, AbortController>) => {
             value.abort();
+            if (this.requestsInProgress>0) {
+               this.requestsInProgress--;
+            }
          })
       }
    }

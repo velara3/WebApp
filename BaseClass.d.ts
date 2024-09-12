@@ -92,10 +92,10 @@ export declare class BaseClass {
      * ```
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param json returns the results as json. default is true
+     * @param returnType type of object to return. json, text, blob or response. default is a response object
      * @returns
      */
-    getURL(url: string, options?: any, type?: string): Promise<any>;
+    getURL(url: string, options?: any, returnType?: string): Promise<any>;
     /**
      * Performs an asynchronous post call.
      * Returns the url as text or json. Default is JSON.
@@ -109,10 +109,10 @@ export declare class BaseClass {
      * Cancel using cancelRequests()
      * @param url url
      * @param options options fetch options object. example, {body: formData }
-     * @param type type of object to return. json, text, blob or response. default is a response object
+     * @param returnType type of object to return. json, text, blob or response. default is a response object
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
-    postURL(url: string, form?: any, options?: any, type?: string): Promise<any>;
+    postURL(url: string, form?: any, options?: any, returnType?: string): Promise<any>;
     /**
      * Makes a request to a url.
      * Returns the url as text or json.
@@ -139,15 +139,16 @@ export declare class BaseClass {
      * ```
      * @param url url
      * @param options options fetch options object. example, {method: "post", body: formData }
-     * @param type returns the results as json by default. options ara text or response for response
+     * @param returnType returns the results as json by default. options ara text or response for response
      * @returns text, parsed json object or a TypeError if network is unavailable.
      */
-    requestURL(url: string, options?: any, type?: string): Promise<any>;
+    requestURL(url: string, options?: any, returnType?: string): Promise<any>;
     /**
-     * Callback when an error occurs calling requestURL() or fetch
+     * Callback when an error occurs calling getURL(), postURL() or requestURL()
      * Override in sub classes
+     * Return an alternative value
      */
-    requestError(error: Error | unknown, url: string): void;
+    requestError(error: Error | unknown, fetchUrl: string, options?: any, url?: string): void;
     /**
      * Attach event listeners here
      * Override in sub classes
