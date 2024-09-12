@@ -242,7 +242,7 @@ export class BaseClass {
          this.controllers.set(requestId, controller);
 
          if (this.baseURI instanceof URL) {
-            fetchURL = this.baseURI.toString();
+            fetchURL = this.addStrings("/", this.baseURI.toString(), url);
          }
          else if (this.baseURI && url.match(this.isBaseURLRegEx) == null) {
             fetchURL = window.location.protocol + "//" + this.addStrings("/", this.baseURI, url);
