@@ -391,10 +391,8 @@ export class BaseClass {
    /**
     * Add an event listener to an object 
     */
-   addEventListener(object: EventSource, event: any, listener: any, options?: any) {
-      if (object) {
-         object.addEventListener(event, listener, options);
-      }
+   addEventListener(object: EventTarget|any, event: any, listener: any, options?: any) {
+      object.addEventListener(event, listener, options);
    }
 
    /**

@@ -21,6 +21,6 @@ Using in your project
 See readme.md
 
 
-Installing in your project
+Installing or Updating in your project
 ---
 npm install base-class-ts@latest

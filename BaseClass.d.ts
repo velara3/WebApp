@@ -189,7 +189,7 @@ export declare class BaseClass {
     /**
      * Add an event listener to an object
      */
-    addEventListener(object: EventSource, event: any, listener: any, options?: any): void;
+    addEventListener(object: EventTarget | any, event: any, listener: any, options?: any): void;
     /**
      * Add a view to the views
      * @param view Element
