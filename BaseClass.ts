@@ -31,6 +31,8 @@ export class BaseClass {
    // determines if a string is a relative or absolute URL
    isBaseURLRegEx: RegExp = /^http/i;
    localClassReference: any | undefined;
+   views: Map<Element, string> = new Map();
+   viewGroups: Map<string, Map<Element, string>> = new Map();
 
    static logMessages: string[] = [];
    static ShowLogs: boolean = true;
@@ -226,7 +228,7 @@ export class BaseClass {
     * @returns text, parsed json object or a TypeError if network is unavailable.
     */
    async requestURL(url: string, options: any = null, returnType: string = "json") {
-      var response: any = null;
+      var response: Response| any = null;
       var fetchURL = url;
       var requestId = this.requestsInProgress++;
 
@@ -258,33 +260,36 @@ export class BaseClass {
          }
 
          if (returnType == "json") {
+            var clone = await response.clone();
             var text = await response.text();
-
+            
             try {
                var data = JSON.parse(text);
+               return data;
             }
             catch (error) {
-               this.log(error);
-               return text;
+               var alternativeResult = this.requestError(error, fetchURL, options, url);
+               if (alternativeResult!==undefined) {
+                  return alternativeResult;
+               }
+               throw error;
             }
-
-            return data;
          }
          else if (returnType == "blob") {
-
-            try {
-               var blob = await response.blob();
-            }
-            catch (error) {
-               this.log(error);
-               return error;
-            }
-
+            var blob = await response.blob();
             return blob;
          }
          else if (returnType == "text") {
             var text = await response.text();
             return text;
+         }
+         else if (returnType == "arrayBuffer") {
+            var arrayBuffer = await response.arrayBuffer();
+            return arrayBuffer;
+         }
+         else if (returnType == "bytes") {
+            var bytes = await response.bytes();
+            return bytes;
          }
          else if (returnType == "response") {
             return response;
@@ -305,7 +310,7 @@ export class BaseClass {
          if (alternativeResult!==undefined) {
             return alternativeResult;
          }
-         return error;
+         throw error;
       }
    }
 
@@ -372,6 +377,82 @@ export class BaseClass {
     */
    sleep(milliseconds: number) {
       return new Promise(resolve => setTimeout(resolve, milliseconds))
+   }
+
+   /**
+    * Returns the first element found matching the selector or null if there is no match
+    * @param selectors 
+    * @returns {Element}
+    */
+   querySelector(selectors:string) {
+      return document.querySelector(selectors);
+   }
+
+   /**
+    * Add an event listener to an object 
+    */
+   addEventListener(object: EventSource, event: any, listener: any, options?: any) {
+      if (object) {
+         object.addEventListener(event, listener, options);
+      }
+   }
+
+   /**
+    * Add a view to the views 
+    * @param view Element
+    * @param group string
+    */
+   addView(view: Element, id: string, group: string) {
+      if (group==null) group = "main";
+      this.views.set(view, id || view.id);
+      this.viewGroups.set(group, this.views);
+   }
+
+   /**
+    * Remove a view from the views 
+    * @param view Element
+    */
+   removeView(view: Element) {
+      this.views.delete(view);
+   }
+
+   /**
+    * Show a view. Sibling elements are hidden if part of the same group
+    * @param view Element to show
+    */
+   showView(view: Element) {
+      var viewGroup: string = this.views.get(view) as string;
+
+      // hide other views in the same parent
+      this.views.forEach((group:String, element: Element)=> {
+
+         if (view==element) {
+            this.showElement(view as HTMLElement);
+         }
+         else if (this.isSiblingNode(view, element)) {
+            if (viewGroup==group) {
+               this.hideElement(view as HTMLElement);
+            }
+         }
+      });
+   }
+   
+   /**
+    * Hide a view.
+    * @param view Element to hide
+    */
+   hideView(view: Element) {
+      this.hideElement(view as HTMLElement);
+   }
+
+   /**
+    * Returns true if elements are siblings
+    * @param {Element} elementA
+    * @param {Element} elementB
+    * @return {Boolean}
+    **/
+   isSiblingNode(elementA: Element, elementB: Element) {
+      return elementA.parentNode == elementB.parentNode;
    }
 
    /**
