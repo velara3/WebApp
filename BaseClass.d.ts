@@ -30,6 +30,8 @@ export declare class BaseClass {
     baseURI: string | URL;
     isBaseURLRegEx: RegExp;
     localClassReference: any | undefined;
+    views: Map<Element, string>;
+    viewGroups: Map<string, Map<Element, string>>;
     static logMessages: string[];
     static ShowLogs: boolean;
     static DOM_CONTENT_LOADED: string;
@@ -178,6 +180,44 @@ export declare class BaseClass {
      * @returns
      */
     sleep(milliseconds: number): Promise<unknown>;
+    /**
+     * Returns the first element found matching the selector or null if there is no match
+     * @param selectors
+     * @returns {Element}
+     */
+    querySelector(selectors: string): Element | null;
+    /**
+     * Add an event listener to an object
+     */
+    addEventListener(object: EventSource, event: any, listener: any, options?: any): void;
+    /**
+     * Add a view to the views
+     * @param view Element
+     * @param group string
+     */
+    addView(view: Element, id: string, group: string): void;
+    /**
+     * Remove a view from the views
+     * @param view Element
+     */
+    removeView(view: Element): void;
+    /**
+     * Show a view. Sibling elements are hidden if part of the same group
+     * @param view Element to show
+     */
+    showView(view: Element): void;
+    /**
+     * Hide a view.
+     * @param view Element to hide
+     */
+    hideView(view: Element): void;
+    /**
+     * Returns true if elements are siblings
+     * @param {Element} elementA
+     * @param {Element} elementB
+     * @return {Boolean}
+     **/
+    isSiblingNode(elementA: Element, elementB: Element): boolean;
     /**
      * Show a dialog.
      * Dialog must be an element defined to the dialog property
