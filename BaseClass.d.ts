@@ -219,6 +219,30 @@ export declare class BaseClass {
      **/
     isSiblingNode(elementA: Element, elementB: Element): boolean;
     /**
+     * Opens a browse for file(s) dialog. Returns an array of files or null if canceled.
+     * The user must call this method from the click event bubble.
+     * Call this method within an async method
+     *
+    ```js
+    // from within a subclass:
+    myButton.addEventListener("click", this.openUploadDialog);
+     
+    async openUploadDialog(event) {
+          try {
+             var files = await this.browseForFile(".doc,.docx");
+             console.log(files);
+          }
+          catch(error) {
+             console.log(error)
+          }
+    }
+     * ```
+     * @param acceptedTypes string of comma separated list of accepted file types. Example, ".doc,.docx"
+     * @param allowMultipleFiles boolean that indicates if multiple files can be selected. default is a single file
+     * @returns An FileList array or null if user cancels
+     */
+    browseForFile(acceptedTypes?: string, allowMultipleFiles?: boolean): Promise<unknown>;
+    /**
      * Show a dialog.
      * Dialog must be an element defined to the dialog property
      * By default the dialog has an id of dialog and is an HTMLDialogElement on the page

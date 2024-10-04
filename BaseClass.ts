@@ -452,6 +452,61 @@ export class BaseClass {
    isSiblingNode(elementA: Element, elementB: Element) {
       return elementA.parentNode == elementB.parentNode;
    }
+   
+   /**
+    * Opens a browse for file(s) dialog. Returns an array of files or null if canceled. 
+    * The user must call this method from the click event bubble.
+    * Call this method within an async method
+    * 
+   ```js
+   // from within a subclass: 
+   myButton.addEventListener("click", this.openUploadDialog);
+    
+   async openUploadDialog(event) {
+         try {
+            var files = await this.browseForFile(".doc,.docx");
+            console.log(files);
+         }
+         catch(error) {
+            console.log(error)
+         }
+   }
+    * ```
+    * @param acceptedTypes string of comma separated list of accepted file types. Example, ".doc,.docx"
+    * @param allowMultipleFiles boolean that indicates if multiple files can be selected. default is a single file
+    * @returns An FileList array or null if user cancels
+    */
+   browseForFile(acceptedTypes?: string, allowMultipleFiles?: boolean): Promise<unknown> {
+      var element = document.createElement("input");
+      element.type = "file";
+      
+      if (acceptedTypes) {
+         element.accept = acceptedTypes;
+      }
+      
+      if (allowMultipleFiles) {
+         element.multiple = allowMultipleFiles;
+      }
+
+      var filePromise = new Promise((resolve, reject) => {
+         
+         var resolveCallback = (event: any)=> {
+            var input = event.currentTarget as HTMLInputElement;
+            resolve(input.files);
+         }
+
+         var cancelCallback = (event: any)=> {
+            resolve(null);
+         }
+
+         element.addEventListener("change", resolveCallback);
+         element.addEventListener("cancel", cancelCallback);
+      });
+      
+      element.dispatchEvent(new MouseEvent("click"));
+
+      return filePromise;
+   }
 
    /**
     * Show a dialog. 
