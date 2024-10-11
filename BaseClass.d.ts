@@ -286,6 +286,7 @@ export declare class BaseClass {
      * @param element element to hide
      */
     hideElements(...elements: Array<HTMLElement>): void;
+    hideElement(element: HTMLElement): void;
     /**
      * Shows an element that would not be displayed at startup
      * The function removes the `hideClass` from the element class list.
@@ -294,6 +295,7 @@ export declare class BaseClass {
      * @param element element to show
      */
     showElements(...elements: Array<HTMLElement>): void;
+    showElement(element: HTMLElement): void;
     /**
      * Gets the version defined at a version endpoint
      * @param text Pretext for version info

@@ -655,6 +655,9 @@ export class BaseClass {
          }
       }
    }
+   hideElement(element:HTMLElement) {
+      this.hideElements(element);
+   }
 
    /**
     * Shows an element that would not be displayed at startup 
@@ -669,6 +672,9 @@ export class BaseClass {
             this.removeClass(element, this.hideClass);
          }
       }
+   }
+   showElement(element:HTMLElement) {
+      this.showElements(element);
    }
 
    /**
