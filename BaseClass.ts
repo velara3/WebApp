@@ -425,11 +425,11 @@ export class BaseClass {
       this.views.forEach((group:String, element: Element)=> {
 
          if (view==element) {
-            this.showElement(view as HTMLElement);
+            this.showElements(view as HTMLElement);
          }
          else if (this.isSiblingNode(view, element)) {
             if (viewGroup==group) {
-               this.hideElement(view as HTMLElement);
+               this.hideElements(view as HTMLElement);
             }
          }
       });
@@ -440,7 +440,7 @@ export class BaseClass {
     * @param view Element to hide
     */
    hideView(view: Element) {
-      this.hideElement(view as HTMLElement);
+      this.hideElements(view as HTMLElement);
    }
 
    /**
@@ -454,7 +454,7 @@ export class BaseClass {
    }
    
    /**
-    * Opens a browse for file(s) dialog. Returns an array of files or null if canceled. 
+    * Opens a browse for file(s) dialog. Returns a [FileList](https://developer.mozilla.org/docs/Web/API/FileList) array of File objects or null if canceled. 
     * The user must call this method from the click event bubble.
     * Call this method within an async method
     * 
@@ -474,7 +474,7 @@ export class BaseClass {
     * ```
     * @param acceptedTypes string of comma separated list of accepted file types. Example, ".doc,.docx"
     * @param allowMultipleFiles boolean that indicates if multiple files can be selected. default is a single file
-    * @returns An FileList array or null if user cancels
+    * @returns A FileList array or null if user cancels
     */
    browseForFile(acceptedTypes?: string, allowMultipleFiles?: boolean): Promise<unknown> {
       var element = document.createElement("input");
@@ -643,22 +643,31 @@ export class BaseClass {
    }
 
    /**
-    * Hides an element that would be displayed at startup
+    * Hides an element or elements that would be displayed at startup. 
+    * The function adds the hideClass to the element class list.
+    * This class defines the style, `display:none`
     * @param element element to hide
     */
-   hideElement(element: HTMLElement | Array<HTMLElement>,) {
-      if (element && "classList" in element) {
-         this.addClass(element, this.hideClass);
+   hideElements(...elements:Array<HTMLElement>) {
+      for (const element of elements) {
+         if (element && "classList" in element) {
+            this.addClass(element, this.hideClass);
+         }
       }
    }
 
    /**
-    * Shows an element that would not be displayed at startup
+    * Shows an element that would not be displayed at startup 
+    * The function removes the `hideClass` from the element class list.
+    * For this to work the element must have the class `hideClass`.
+    * Use `hideElements()` to add the class to the element or add it the class in the HTML
     * @param element element to show
     */
-   showElement(element: HTMLElement | Array<HTMLElement>) {
-      if (element && "classList" in element) {
-         this.removeClass(element, this.hideClass);
+   showElements(...elements:Array<HTMLElement>) {
+      for (const element of elements) {
+         if (element && "classList" in element) {
+            this.removeClass(element, this.hideClass);
+         }
       }
    }
 
@@ -743,6 +752,29 @@ export class BaseClass {
    }
 
    /**
+    * Set the HTML content of an element
+    * @param element element that will be set 
+    * @param value value to set 
+    * @param tooltip value to set tool tip (optional)
+    * @param resetValue value to be set after a reset timeout (optional)
+    * @param resetTimeout timeout in milliseconds to reset style to (optional)
+    */
+   setHTML(element: HTMLElement, value: string, tooltip: any = null, resetValue: any = null, resetTimeout: number = 5000) {
+      element.innerHTML = value;
+
+      if (typeof tooltip == "string") {
+         element.title = tooltip;
+      }
+      else if (tooltip) {
+         element.title = value;
+      }
+
+      if (resetValue !== null) {
+         setTimeout(this.setHTML, resetTimeout, element, resetValue)
+      }
+   }
+
+   /**
     * Set the text content of a span element
     * @param element element that will be set 
     * @param value value to set span
@@ -763,6 +795,16 @@ export class BaseClass {
       if (resetValue !== null) {
          setTimeout(this.setSpan, resetTimeout, element, resetValue)
       }
+   }
+
+   /**
+    * Set attribute on element
+    * @param element 
+    * @param property 
+    * @param value 
+    */
+   setAttribute(element: Element, property:any, value: any) {
+      element.setAttribute(property, value);
    }
 
    /**

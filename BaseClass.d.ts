@@ -219,7 +219,7 @@ export declare class BaseClass {
      **/
     isSiblingNode(elementA: Element, elementB: Element): boolean;
     /**
-     * Opens a browse for file(s) dialog. Returns an array of files or null if canceled.
+     * Opens a browse for file(s) dialog. Returns a [FileList](https://developer.mozilla.org/docs/Web/API/FileList) array of File objects or null if canceled.
      * The user must call this method from the click event bubble.
      * Call this method within an async method
      *
@@ -239,7 +239,7 @@ export declare class BaseClass {
      * ```
      * @param acceptedTypes string of comma separated list of accepted file types. Example, ".doc,.docx"
      * @param allowMultipleFiles boolean that indicates if multiple files can be selected. default is a single file
-     * @returns An FileList array or null if user cancels
+     * @returns A FileList array or null if user cancels
      */
     browseForFile(acceptedTypes?: string, allowMultipleFiles?: boolean): Promise<unknown>;
     /**
@@ -280,15 +280,20 @@ export declare class BaseClass {
      */
     revealElement(element: HTMLElement, display?: boolean): void;
     /**
-     * Hides an element that would be displayed at startup
+     * Hides an element or elements that would be displayed at startup.
+     * The function adds the hideClass to the element class list.
+     * This class defines the style, `display:none`
      * @param element element to hide
      */
-    hideElement(element: HTMLElement | Array<HTMLElement>): void;
+    hideElements(...elements: Array<HTMLElement>): void;
     /**
      * Shows an element that would not be displayed at startup
+     * The function removes the `hideClass` from the element class list.
+     * For this to work the element must have the class `hideClass`.
+     * Use `hideElements()` to add the class to the element or add it the class in the HTML
      * @param element element to show
      */
-    showElement(element: HTMLElement | Array<HTMLElement>): void;
+    showElements(...elements: Array<HTMLElement>): void;
     /**
      * Gets the version defined at a version endpoint
      * @param text Pretext for version info
@@ -324,6 +329,15 @@ export declare class BaseClass {
      */
     setContent(element: HTMLElement, value: string, tooltip?: any, resetValue?: any, resetTimeout?: number): void;
     /**
+     * Set the HTML content of an element
+     * @param element element that will be set
+     * @param value value to set
+     * @param tooltip value to set tool tip (optional)
+     * @param resetValue value to be set after a reset timeout (optional)
+     * @param resetTimeout timeout in milliseconds to reset style to (optional)
+     */
+    setHTML(element: HTMLElement, value: string, tooltip?: any, resetValue?: any, resetTimeout?: number): void;
+    /**
      * Set the text content of a span element
      * @param element element that will be set
      * @param value value to set span
@@ -332,6 +346,13 @@ export declare class BaseClass {
      * @param resetTimeout timeout in milliseconds to reset style to (optional)
      */
     setSpan(element: HTMLElement, value: string, tooltip?: any, resetValue?: any, resetTimeout?: number): void;
+    /**
+     * Set attribute on element
+     * @param element
+     * @param property
+     * @param value
+     */
+    setAttribute(element: Element, property: any, value: any): void;
     /**
      * Add element to the container.
      * Element can be string or element. If string then the element is created
