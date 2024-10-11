@@ -331,6 +331,23 @@ export class BaseClass {
    setupEventListeners() {
 
    }
+   
+   /**
+    * Validate all the elements in the view or views are not null
+    */
+   validateViews(...views:any[]) {
+      if (views.length) { 
+         for (var view of views) {
+            for (var name in view) {
+               let element = view[name];
+               if (element==null) {
+                  this.log(this.addStrings(" ", name, "in a view was not found"));
+                  throw new Error("A required view element was not found (" + element + ")");
+               }
+            }
+         }
+      }
+   }
 
    /**
     * Get references to view elements here.

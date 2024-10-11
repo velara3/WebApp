@@ -157,6 +157,10 @@ export declare class BaseClass {
      */
     setupEventListeners(): void;
     /**
+     * Validate all the elements in the view or views are not null
+     */
+    validateViews(...views: any[]): void;
+    /**
      * Get references to view elements here.
      * You do not need to do this if you use classes or views
      * Override in sub classes
