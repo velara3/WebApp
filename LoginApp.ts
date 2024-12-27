@@ -5,6 +5,10 @@ window.addEventListener(BaseClass.PAGE_LOADED, ()=> { new LoginApp() })
 
 export var view: LoginElements = new LoginElements();
 
+/**
+ * Page [open](./login.html)  
+ * CSS [open](./styles/login.css)   
+ */
 export class LoginApp extends BaseClass {
 
    constructor() {

@@ -402,8 +402,9 @@ export declare class BaseClass {
      */
     scrollToBottom(element: Element): void;
     getDownloadData(url: string): Promise<Blob>;
+    getArrayBufferAtURL(url: string): Promise<ArrayBuffer>;
     getFileBinaryAtURL(url: string): Promise<Uint8Array>;
-    upload(url: string, file: File | Blob | Array<File | Blob>, formData?: FormData): Promise<any>;
+    upload(url: string, file: File | Blob | Array<File | Blob>, formData?: FormData, options?: object, returnType?: string): Promise<any>;
     copyToClipboard(value: string): void;
     openInWindow(url: string, target: string): void;
     checkFragment(): Promise<void>;

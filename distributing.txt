@@ -18,7 +18,8 @@ npm publish
 
 Using in your project
 ---
-See readme.md
+See readme.md for usage
+npm install base-class-ts@latest
 
 
 Installing or Updating in your project

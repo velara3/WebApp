@@ -12,7 +12,7 @@ export class BaseClass {
    controllers: Map<number, AbortController> = new Map();
    requestIcon: HTMLElement = document.querySelector(this.requestIconSelector) as HTMLElement;
    dialog: HTMLDialogElement = document.querySelector(this.dialogSelector) as HTMLDialogElement;
-   versionLabel: HTMLElement = this.dialog?.querySelector(this.versionLabelSelector) as HTMLElement;
+   versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
    requestsInProgress: number = 0;
    /**
     * If this is set then it is the base URL for relative URLs used in fetch calls
@@ -957,9 +957,36 @@ export class BaseClass {
    }
 
    async getDownloadData(url: string): Promise<Blob> {
-      var binary = await this.getFileBinaryAtURL(url);
+      var binary: Uint8Array = await this.getFileBinaryAtURL(url);
+      // @ts-ignore started to get error on the next line - todo
       var binaryBuffer = new Blob([binary.buffer]);
       return binaryBuffer;
+   }
+   
+   getArrayBufferAtURL(url: string): Promise<ArrayBuffer> {
+      return new Promise((resolve, reject) => {
+         const request = new XMLHttpRequest();
+
+         request.onload = () => {
+            if (request.status === 200) {
+               try {
+                  resolve(request.response);
+               }
+               catch (error) {
+                  reject(error);
+               }
+            }
+            else {
+               reject(request.status);
+            }
+         }
+
+         request.onerror = reject;
+         request.onabort = reject;
+         request.open('GET', url, true);
+         request.responseType = "arraybuffer";
+         request.send();
+      });
    }
 
    getFileBinaryAtURL(url: string): Promise<Uint8Array> {
@@ -989,7 +1016,7 @@ export class BaseClass {
       });
    }
 
-   async upload(url: string, file: File | Blob | Array<File | Blob>, formData?: FormData) {
+   async upload(url: string, file: File | Blob | Array<File | Blob>, formData?: FormData, options?: object, returnType?: string) {
 
       try {
 
@@ -1008,17 +1035,15 @@ export class BaseClass {
          }
 
          try {
-            var results = await this.postURL(url, formData);
-            return results;
+            var response = await this.postURL(url, formData, options, returnType);
+            return response;
          }
          catch (error) {
-            this.log(error);
-            return error;
+            throw error;
          }
       }
       catch (error) {
-         this.log(error);
-         return error;
+         throw error;
       }
    }
 
@@ -1241,7 +1266,7 @@ export class BaseClass {
          if (nextString != null) {
             character = value.charAt(value.length - 1);
 
-            // if separater is alrdady at end of first string just add value
+            // if separater is already at end of first string just add value
             if (character == separator) {
                value += nextString;
             }
@@ -1274,8 +1299,7 @@ export class BaseClass {
     * Default CSS added to the page necessary for some functionality. 
     * You can add to this string in your sub class
     */
-   defaultCSS =
-      `.display {
+   defaultCSS = `.display {
        display: block !important;
    }
    .noDisplay {

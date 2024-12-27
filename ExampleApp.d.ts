@@ -1,4 +1,8 @@
 import { BaseClass } from "./BaseClass.js";
+/**
+ * Page [page](./example.html)
+ * CSS [css](./styles/example.css)
+ */
 export declare class ExampleApp extends BaseClass {
     examplesData: Record<string, any>;
     renderers: Record<string, any>;

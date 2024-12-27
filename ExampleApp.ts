@@ -1,6 +1,10 @@
 import * as view from "./ExampleElements.js";
 import { BaseClass } from "./BaseClass.js";
 
+/**
+ * Page [page](./example.html)  
+ * CSS [css](./styles/example.css)   
+ */
 export class ExampleApp extends BaseClass {
    examplesData: Record<string, any> = {};
    renderers: Record<string, any> = {};
