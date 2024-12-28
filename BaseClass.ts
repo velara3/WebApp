@@ -121,7 +121,7 @@ export class BaseClass {
       try {
 
          if (options?.bindProperties) {
-            this.bindProperties(this.localClassReference);
+            this.bindProperties(this.localClassReference, options?.bindExclusions);
          }
 
          this.bindViewElements();
@@ -921,13 +921,20 @@ export class BaseClass {
     * Bind the members on this class to refer to this class
     * @param mainClass Class to add bindings to
     */
-   bindProperties(mainClass: any) {
+   bindProperties(mainClass: any, exclusions?: string[]) {
       var properties: any = Object.getOwnPropertyNames(mainClass.prototype);
       var that: any = this;
       for (var key in properties) {
          var property: string = properties[key];
          if (property !== "constructor") {
-            that[property] = that[property].bind(this);
+            if (exclusions && exclusions.length) {
+               if (exclusions.indexOf(property)==-1) {
+                  that[property] = that[property].bind(this);
+               }
+            }
+            else {
+               that[property] = that[property].bind(this);
+            }
          }
       }
    }
@@ -958,19 +965,20 @@ export class BaseClass {
 
    async getDownloadData(url: string): Promise<Blob> {
       var binary: Uint8Array = await this.getFileBinaryAtURL(url);
-      // @ts-ignore started to get error on the next line - todo
+      // @ts-ignore gives error in vscode but in tsplayground no error
       var binaryBuffer = new Blob([binary.buffer]);
       return binaryBuffer;
    }
-   
-   getArrayBufferAtURL(url: string): Promise<ArrayBuffer> {
+
+   async getFileBinaryAtURL(url: string): Promise<Uint8Array> {
       return new Promise((resolve, reject) => {
          const request = new XMLHttpRequest();
 
          request.onload = () => {
             if (request.status === 200) {
                try {
-                  resolve(request.response);
+                  const array = new Uint8Array(request.response);
+                  resolve(array);
                }
                catch (error) {
                   reject(error);
@@ -988,16 +996,15 @@ export class BaseClass {
          request.send();
       });
    }
-
-   getFileBinaryAtURL(url: string): Promise<Uint8Array> {
+   
+   async getArrayBufferAtURL(url: string): Promise<ArrayBuffer> {
       return new Promise((resolve, reject) => {
          const request = new XMLHttpRequest();
 
          request.onload = () => {
             if (request.status === 200) {
                try {
-                  const array = new Uint8Array(request.response);
-                  resolve(array);
+                  resolve(request.response);
                }
                catch (error) {
                   reject(error);
@@ -1321,13 +1328,14 @@ export class BaseClass {
 
 /**
 * Returns a new instance of a start options
-* @returns TextRange
+* @returns StartOptions
 */
 export function getStartOptions(): StartOptions {
 
    return {
       addStyles: true,
       bindProperties: true,
+      bindExclusions: [],
       storeReference: true,
       startEvent: BaseClass.DOM_CONTENT_LOADED
    }
@@ -1336,5 +1344,6 @@ export type StartOptions = {
    startEvent?: string,
    addStyles?: boolean,
    bindProperties?: boolean,
+   bindExclusions?: string[],
    storeReference?: boolean
 }

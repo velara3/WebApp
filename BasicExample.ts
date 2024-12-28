@@ -6,13 +6,21 @@ import { BaseClass } from "./BaseClass";
  * Page [open](./page.html)  
  * CSS [open](./styles/styles.css)   
  */
-export class ExampleApp extends BaseClass {
+export class BasicExample extends BaseClass {
    message: string = "hello world"
 
    constructor() {
       super();
    }
 
+   /**
+    * Override the start() function and put your code here
+    * The page has loaded and is ready 
+    * The following events are calling in order: 
+    * bindViewElements()
+    * setupEventListeners()
+    * start()
+    */
    override async start() {
 
       try {
@@ -25,18 +33,26 @@ export class ExampleApp extends BaseClass {
 
    override setupEventListeners(): void {
       try {
-         window.addEventListener("click", () => {
-            this.showAlert(this.message)
-         });
+         window.addEventListener("click", this.showMessage);
       }
       catch (error) {
          this.log(error);
       }
    }
 
-   showAlert(value: string) {
-      alert(value);
+   showMessage() {
+      alert(this.message);
    }
 }
 
-export { };
+/**
+ * By default this function adds a listener for the page DOMContentLoaded event.
+ * When that event is dispatched the class instance is created
+ * and the following methods are called in order:  
+ * - bindViewElements()
+ * - setupEventListeners()
+ * - start()
+ * 
+ * You can pass in startup options to adjust starting preferences 
+ */
+BaseClass.startWhenReady(BasicExample);

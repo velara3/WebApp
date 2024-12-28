@@ -1,8 +1,6 @@
 import { BaseClass } from "./BaseClass.js";
 import { LoginElements } from "./LoginElements.js";
 
-window.addEventListener(BaseClass.PAGE_LOADED, ()=> { new LoginApp() })
-
 export var view: LoginElements = new LoginElements();
 
 /**
@@ -13,16 +11,17 @@ export class LoginApp extends BaseClass {
 
    constructor() {
       super();
+   }
 
+   override async start(): Promise<void> {
       try {
-        this.bindProperties(LoginApp);
-        this.showRequestIcon(false);
-        this.setupEventListeners();
-      }
-      catch(error) {
-         this.log(error);
-         this.showDialog("Error", error as string);
-      }
+         this.showRequestIcon(false);
+         this.setupEventListeners();
+       }
+       catch(error) {
+          this.log(error);
+          this.showDialog("Error", error as string);
+       }
    }
 
    override setupEventListeners(): void {
@@ -76,3 +75,5 @@ export class LoginApp extends BaseClass {
       }
    }
 }
+
+BaseClass.startWhenReady(LoginApp);

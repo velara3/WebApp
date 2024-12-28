@@ -16,7 +16,6 @@ export class ExampleApp extends BaseClass {
    override async start() {
 
       try {
-         this.bindProperties(ExampleApp);
          this.showRequestIcon(false);
          this.setupEventListeners();
          await this.getExampleData();
@@ -64,7 +63,7 @@ export class ExampleApp extends BaseClass {
       }
    }
    
-   parseData(container:HTMLElement, data:Record<string, any>, clear = false) {
+   parseData(container: HTMLElement, data: Record<string, any>, clear = false) {
       try {
          var items = data;
          var numberOfItems = items ? items.length : 0;
@@ -128,4 +127,3 @@ export class ExampleApp extends BaseClass {
 }
 
 BaseClass.startWhenReady(ExampleApp);
-export {};

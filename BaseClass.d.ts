@@ -387,7 +387,7 @@ export declare class BaseClass {
      * Bind the members on this class to refer to this class
      * @param mainClass Class to add bindings to
      */
-    bindProperties(mainClass: any): void;
+    bindProperties(mainClass: any, exclusions?: string[]): void;
     /**
      * Scroll element into view
      * @param element element to scroll into view
@@ -402,8 +402,8 @@ export declare class BaseClass {
      */
     scrollToBottom(element: Element): void;
     getDownloadData(url: string): Promise<Blob>;
-    getArrayBufferAtURL(url: string): Promise<ArrayBuffer>;
     getFileBinaryAtURL(url: string): Promise<Uint8Array>;
+    getArrayBufferAtURL(url: string): Promise<ArrayBuffer>;
     upload(url: string, file: File | Blob | Array<File | Blob>, formData?: FormData, options?: object, returnType?: string): Promise<any>;
     copyToClipboard(value: string): void;
     openInWindow(url: string, target: string): void;
@@ -483,12 +483,13 @@ export declare class BaseClass {
 }
 /**
 * Returns a new instance of a start options
-* @returns TextRange
+* @returns StartOptions
 */
 export declare function getStartOptions(): StartOptions;
 export type StartOptions = {
     startEvent?: string;
     addStyles?: boolean;
     bindProperties?: boolean;
+    bindExclusions?: string[];
     storeReference?: boolean;
 };
