@@ -7,6 +7,7 @@ export declare var view: LoginElements;
  */
 export declare class LoginApp extends BaseClass {
     constructor();
+    start(): Promise<void>;
     setupEventListeners(): void;
     inputKeyupHandler(event: any): void;
     submitFormHandler(event: any): Promise<void>;

@@ -15,4 +15,3 @@ export declare class ExampleApp extends BaseClass {
     exampleItemClickHandler(event: any): Promise<void>;
     checkQuery(): Promise<void>;
 }
-export {};
