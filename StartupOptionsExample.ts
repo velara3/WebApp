@@ -1,12 +1,12 @@
-import { BaseClass } from "./BaseClass";
+import { BaseClass, getStartOptions, StartOptions } from "./BaseClass";
 
 /**
- * This is example documentation. This class extends BaseClass
+ * This example shows setting up startup options.
  * Add links to relevant pages in your own project.  
  * Page [open](./page.html)  
  * CSS [open](./styles/styles.css)   
  */
-export class BasicExample extends BaseClass {
+export class StartupOptions extends BaseClass {
    message: string = "hello world"
 
    constructor() {
@@ -31,17 +31,9 @@ export class BasicExample extends BaseClass {
       }
    }
 
-   override setupEventListeners(): void {
-      try {
-         window.addEventListener("click", this.showMessage);
-      }
-      catch (error) {
-         this.log(error);
-      }
-   }
-
-   showMessage() {
-      alert(this.message);
+   test() {
+      // because of our startup options,
+      // this method is excluded from class binding in bindProperties()
    }
 }
 
@@ -61,4 +53,7 @@ export class BasicExample extends BaseClass {
  *  
  * You can pass in startup options to adjust starting preferences 
  */
-BaseClass.startWhenReady(BasicExample);
+
+var startOptions: StartOptions = getStartOptions();
+startOptions.bindExclusions = ["test"];
+BaseClass.startWhenReady(StartupOptions);
