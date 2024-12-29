@@ -15,6 +15,11 @@ update version number in package.json
 push to github
 npm publish
 
+terminal commands:  
+tsc
+git push
+npm publish
+
 
 Using in your project
 ---

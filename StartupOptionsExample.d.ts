@@ -1,6 +1,6 @@
 import { BaseClass } from "./BaseClass";
 /**
- * This shows setting up startup options.
+ * This example shows setting up startup options.
  * Add links to relevant pages in your own project.
  * Page [open](./page.html)
  * CSS [open](./styles/styles.css)
