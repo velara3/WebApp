@@ -220,6 +220,12 @@ export declare class BaseClass {
      */
     addViewElementById(id: string): HTMLElement;
     /**
+     * Add an element to the elements map using it's selector for validation
+     * @param id string
+     * @returns HTMLElement
+     */
+    addViewElementBySelector(selector: string): HTMLElement;
+    /**
      * Remove a view from the views
      * @param view Element
      */

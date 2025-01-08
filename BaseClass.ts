@@ -463,6 +463,20 @@ export class BaseClass {
    }
 
    /**
+    * Add an element to the elements map using it's selector for validation
+    * @param id string
+    * @returns HTMLElement
+    */
+   addViewElementBySelector(selector: string):HTMLElement {
+      var element = document.querySelector(selector) as HTMLElement;
+      if (element==null) {
+         throw new Error("A required view element with selector, " + selector + " was not found");
+      }
+      this.elements.set(element, selector || element.id);
+      return element;
+   }
+
+   /**
     * Remove a view from the views 
     * @param view Element
     */
