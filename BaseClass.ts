@@ -35,8 +35,9 @@ export class BaseClass {
    viewGroups: Map<string, Map<Element, string>> = new Map();
    /**
     * Add UI elements to this array to make sure that the element is not null
+    * Add elements by calling addViewElement()
     */
-   elements: Array<string> = [];
+   elements: Map<Element, string> = new Map();
 
    static logMessages: string[] = [];
    static ShowLogs: boolean = true;
@@ -445,6 +446,22 @@ export class BaseClass {
       if (group==null) group = "main";
       this.views.set(view, id || view.id);
       this.viewGroups.set(group, this.views);
+   }
+
+   /**
+    * Add an element to the elements map for validation 
+    * @param element Element
+    * @param id string
+    */
+   addViewElement(element: Element, id: string) {
+      if (element==null) {
+         element = document.getElementById(id) as Element;
+      }
+      if (element==null) {
+         throw new Error("A required view element with id, " + id + " was not found");
+         return;
+      }
+      this.elements.set(element, id || element.id);
    }
 
    /**

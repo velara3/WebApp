@@ -34,8 +34,9 @@ export declare class BaseClass {
     viewGroups: Map<string, Map<Element, string>>;
     /**
      * Add UI elements to this array to make sure that the element is not null
+     * Add elements by calling addViewElement()
      */
-    elements: Array<string>;
+    elements: Map<Element, string>;
     static logMessages: string[];
     static ShowLogs: boolean;
     static DOM_CONTENT_LOADED: string;
@@ -212,6 +213,12 @@ export declare class BaseClass {
      * @param group string
      */
     addView(view: Element, id: string, group: string): void;
+    /**
+     * Add an element to the elements map for validation
+     * @param element Element
+     * @param id string
+     */
+    addViewElement(element: Element, id: string): void;
     /**
      * Remove a view from the views
      * @param view Element
