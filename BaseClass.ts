@@ -449,14 +449,11 @@ export class BaseClass {
    }
 
    /**
-    * Add an element to the elements map for validation 
-    * @param element Element
+    * Add an element to the elements map for validation
     * @param id string
     */
-   addViewElement(element: Element, id: string) {
-      if (element==null) {
-         element = document.getElementById(id) as Element;
-      }
+   addViewElementById(id: string) {
+      var element = document.getElementById(id) as Element;
       if (element==null) {
          throw new Error("A required view element with id, " + id + " was not found");
          return;
