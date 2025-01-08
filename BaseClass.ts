@@ -459,6 +459,7 @@ export class BaseClass {
          return;
       }
       this.elements.set(element, id || element.id);
+      return element;
    }
 
    /**
