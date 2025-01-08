@@ -216,8 +216,9 @@ export declare class BaseClass {
     /**
      * Add an element to the elements map for validation
      * @param id string
+     * @returns HTMLElement
      */
-    addViewElementById(id: string): Element | undefined;
+    addViewElementById(id: string): HTMLElement;
     /**
      * Remove a view from the views
      * @param view Element

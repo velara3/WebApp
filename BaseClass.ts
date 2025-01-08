@@ -451,12 +451,12 @@ export class BaseClass {
    /**
     * Add an element to the elements map for validation
     * @param id string
+    * @returns HTMLElement
     */
-   addViewElementById(id: string) {
-      var element = document.getElementById(id) as Element;
+   addViewElementById(id: string):HTMLElement {
+      var element = document.getElementById(id) as HTMLElement;
       if (element==null) {
          throw new Error("A required view element with id, " + id + " was not found");
-         return;
       }
       this.elements.set(element, id || element.id);
       return element;
