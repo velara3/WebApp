@@ -33,6 +33,10 @@ export class BaseClass {
    localClassReference: any | undefined;
    views: Map<Element, string> = new Map();
    viewGroups: Map<string, Map<Element, string>> = new Map();
+   /**
+    * Add UI elements to this array to make sure that the element is not null
+    */
+   elements: Array<string> = [];
 
    static logMessages: string[] = [];
    static ShowLogs: boolean = true;
@@ -125,6 +129,8 @@ export class BaseClass {
          }
 
          this.bindViewElements();
+         this.validateElements();
+         this.validateViews(this.views);
          this.setupEventListeners();
 
          if (options?.addStyles) {
@@ -331,12 +337,30 @@ export class BaseClass {
    setupEventListeners() {
 
    }
+
+   /**
+    * Validate all the elements in the class
+    * Throws an error if view elements are not found
+    * Called after bindViewElements()
+    */
+   validateElements(...elements:any[]) {
+      if (elements && elements.length) { 
+         for (var element of elements) {
+            if (element==null) {
+               this.log(this.addStrings(" ", "a view element in this class was not found"));
+               throw new Error("A required view element was not found");
+            }
+         }
+      }
+   }
    
    /**
-    * Validate all the elements in the view or views are not null
+    * Validate all the elements in the view and that the views are not null
+    * Throws an error if view elements are not found
+    * Called after bindViewElements()
     */
    validateViews(...views:any[]) {
-      if (views.length) { 
+      if (views && views.length) { 
          for (var view of views) {
             for (var name in view) {
                let element = view[name];

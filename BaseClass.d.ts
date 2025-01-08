@@ -32,6 +32,10 @@ export declare class BaseClass {
     localClassReference: any | undefined;
     views: Map<Element, string>;
     viewGroups: Map<string, Map<Element, string>>;
+    /**
+     * Add UI elements to this array to make sure that the element is not null
+     */
+    elements: Array<string>;
     static logMessages: string[];
     static ShowLogs: boolean;
     static DOM_CONTENT_LOADED: string;
@@ -157,7 +161,15 @@ export declare class BaseClass {
      */
     setupEventListeners(): void;
     /**
-     * Validate all the elements in the view or views are not null
+     * Validate all the elements in the class
+     * Throws an error if view elements are not found
+     * Called after bindViewElements()
+     */
+    validateElements(...elements: any[]): void;
+    /**
+     * Validate all the elements in the view and that the views are not null
+     * Throws an error if view elements are not found
+     * Called after bindViewElements()
      */
     validateViews(...views: any[]): void;
     /**
