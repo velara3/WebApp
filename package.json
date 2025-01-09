@@ -1,6 +1,6 @@
 {
   "name": "base-class-ts",
-  "version": "1.3.73",
+  "version": "1.3.74",
   "description": "Base class for client side typescript javascript projects",
   "main": "index.ts",
   "scripts": {
