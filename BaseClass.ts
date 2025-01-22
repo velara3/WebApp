@@ -28,6 +28,7 @@ export class BaseClass {
     *
     */
    baseURI: string|URL = "";
+   logBaseURI: boolean = false;
    // determines if a string is a relative or absolute URL
    isBaseURLRegEx: RegExp = /^http/i;
    localClassReference: any | undefined;
@@ -257,6 +258,10 @@ export class BaseClass {
             fetchURL = window.location.protocol + "//" + this.addStrings("/", this.baseURI, url);
          }
 
+         if (this.logBaseURI) {
+            this.log("URL: " + fetchURL);
+         }
+         
          response = await fetch(fetchURL, options);
 
          this.controllers.delete(requestId);
@@ -1221,7 +1226,7 @@ export class BaseClass {
     * @param {HTMLSelectElement} list 
     * @param {string} classname name of class that represents selected item
     **/
-   getSelectedListItem(list:HTMLElement|any, classname:string = "") {
+   getSelectedListItem(list: HTMLElement|any, classname: string = "") {
 
       if (classname) {
          var options = list.options || list.children;
@@ -1274,7 +1279,72 @@ export class BaseClass {
       else {
          list.value = value;
       }
+   }
+   
+   /**
+    * Select a list item by option
+    * ```js
+    * // example finding existing object
+    * var option = {name: "apple"}
+    * mylist.appendChild(option);
+    * selectListItemByOption(myList, option);
+    * ```
+    * @param {HTMLSelectElement} list 
+    **/
+   selectListItemByOption(list: HTMLElement | any, option: any) {
+      
+      if (option && option.value!=null) {
+         list.value = option.value;
+      }
+      else {
+         var options = list.options;
+         for (let i = 0; i < options.length; i++) {
+            if (options[i]==option) {
+               list.selectedIndex = i;
+               break;
+            }
+         }
+      }
+   }
+   
+   /**
+    * Select a list item by value
+    * ```js
+    * // Example to select option when option is a string and value is "apple" 
+    * selectListOptionByValue(myList, "apple");
+    * 
+    * // Example to select option when option is an object and value contains "apple" 
+    * selectListOptionByValue(myList, "apple", "value");
+    * 
+    * // Example 2 to select option when option is an object value contains a string 
+    * selectListOptionByValue(myList, findValue, "option_value", "object_property_name");
+    * 
+    * // example finding object with name as apple
+    * mylist.value = {name: "apple"}
+    * selectListOptionByValue(myList, "apple", "value", "name");
+    * ```
+    * @param {HTMLSelectElement} list 
+    **/
+   selectListOptionByValue(list: HTMLElement | any, searchValue: any = null, property: string | any = null, property2: string | any = null) {
 
+      if (property2) {
+         var option = this.getListOption(list.options, searchValue, property, property2);
+         if (option) {
+            list.value = option.value;
+         }
+      }
+      else if (property) {
+         option = this.getListOption(list.options, searchValue, property);
+         if (option) {
+            list.value = option.value;
+         }
+      }
+      else if (option) {
+         list.value = option.value;
+      }
+      else {
+         list.value = searchValue;
+      }
    }
 
    /**

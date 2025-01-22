@@ -28,6 +28,7 @@ export declare class BaseClass {
      *
      */
     baseURI: string | URL;
+    logBaseURI: boolean;
     isBaseURLRegEx: RegExp;
     localClassReference: any | undefined;
     views: Map<Element, string>;
@@ -486,6 +487,36 @@ export declare class BaseClass {
      * @param {HTMLSelectElement} list
      **/
     selectListOption(list: HTMLElement | any, option: any, value?: any, property?: string | any, property2?: string | any): void;
+    /**
+     * Select a list item by option
+     * ```js
+     * // example finding existing object
+     * var option = {name: "apple"}
+     * mylist.appendChild(option);
+     * selectListItemByOption(myList, option);
+     * ```
+     * @param {HTMLSelectElement} list
+     **/
+    selectListItemByOption(list: HTMLElement | any, option: any): void;
+    /**
+     * Select a list item by value
+     * ```js
+     * // Example to select option when option is a string and value is "apple"
+     * selectListOptionByValue(myList, "apple");
+     *
+     * // Example to select option when option is an object and value contains "apple"
+     * selectListOptionByValue(myList, "apple", "value");
+     *
+     * // Example 2 to select option when option is an object value contains a string
+     * selectListOptionByValue(myList, findValue, "option_value", "object_property_name");
+     *
+     * // example finding object with name as apple
+     * mylist.value = {name: "apple"}
+     * selectListOptionByValue(myList, "apple", "value", "name");
+     * ```
+     * @param {HTMLSelectElement} list
+     **/
+    selectListOptionByValue(list: HTMLElement | any, searchValue?: any, property?: string | any, property2?: string | any): void;
     /**
     * Log values to the console
     * @param values values to log
