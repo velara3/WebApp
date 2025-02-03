@@ -310,7 +310,7 @@ export class BaseClass {
          return response;
       }
       catch (error) {
-         this.controllers.delete(requestId);
+         this.controllers.has(requestId) && this.controllers.delete(requestId);
          this.requestsInProgress--;
 
          if (this.controllers.size == 0) {
@@ -408,11 +408,14 @@ export class BaseClass {
    cancelRequests() {
       if (this.controllers) {
          this.controllers.forEach((value: AbortController, key: number, map: Map<number, AbortController>) => {
-            value.abort();
+            if (value.signal.aborted==false) {
+               value.abort();
+            }
             if (this.requestsInProgress>0) {
                this.requestsInProgress--;
             }
          })
+         this.controllers.clear();
       }
    }
 
