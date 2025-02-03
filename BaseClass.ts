@@ -14,6 +14,7 @@ export class BaseClass {
    dialog: HTMLDialogElement = document.querySelector(this.dialogSelector) as HTMLDialogElement;
    versionLabel: HTMLElement = document.querySelector(this.versionLabelSelector) as HTMLElement;
    requestsInProgress: number = 0;
+   requestIconsDelay: number = 10;
    /**
     * If this is set then it is the base URL for relative URLs used in fetch calls
     * 
@@ -242,7 +243,7 @@ export class BaseClass {
 
       try {
          this.showRequestIcon();
-         await this.sleep(10);
+         await this.sleep(this.requestIconsDelay);
 
          const controller = new AbortController();
          const signal = controller.signal;
@@ -264,7 +265,10 @@ export class BaseClass {
          
          response = await fetch(fetchURL, options);
 
-         this.controllers.delete(requestId);
+         if (this.controllers.has(requestId)) {
+            this.controllers.delete(requestId);
+         }
+
          this.requestsInProgress--;
 
          if (this.controllers.size == 0) {
@@ -317,11 +321,16 @@ export class BaseClass {
             this.showRequestIcon(false);
          }
 
+         // AbortError: signal is aborted without reason
+         // don't know the cause of this yet
+
          // "Failed to fetch" - means the url is not found or server off line
          var alternativeResult = this.requestError(error, fetchURL, options, url);
          if (alternativeResult!==undefined) {
             return alternativeResult;
          }
+
+
          throw error;
       }
    }
@@ -409,13 +418,9 @@ export class BaseClass {
    cancelRequests() {
       if (this.controllers) {
          this.controllers.forEach((value: AbortController, key: number, map: Map<number, AbortController>) => {
-            if (value.signal.aborted==false) {
-               value.abort();
-            }
-            if (this.requestsInProgress>0) {
-               this.requestsInProgress--;
-            }
+            value.signal.aborted || value.abort();
          })
+         this.requestsInProgress = 0;
          this.controllers.clear();
       }
       this.showRequestIcon(false);

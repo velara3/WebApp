@@ -14,6 +14,7 @@ export declare class BaseClass {
     dialog: HTMLDialogElement;
     versionLabel: HTMLElement;
     requestsInProgress: number;
+    requestIconsDelay: number;
     /**
      * If this is set then it is the base URL for relative URLs used in fetch calls
      *
