@@ -403,7 +403,8 @@ export class BaseClass {
    }
 
    /**
-    * Cancel any requests
+    * Cancel any requests. 
+    * This clears the lists of controllers and hide the request icon.
     */
    cancelRequests() {
       if (this.controllers) {
@@ -417,6 +418,7 @@ export class BaseClass {
          })
          this.controllers.clear();
       }
+      this.showRequestIcon(false);
    }
 
    /**

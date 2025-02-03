@@ -188,7 +188,8 @@ export declare class BaseClass {
      */
     postMessageHandler(event: any): void;
     /**
-     * Cancel any requests
+     * Cancel any requests.
+     * This clears the lists of controllers and hide the request icon.
      */
     cancelRequests(): void;
     /**
